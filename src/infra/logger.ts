@@ -1,9 +1,4 @@
-import { debug } from "console";
-import { NextFunction, Request, Response } from "express";
-import path from "path";
 import pino from "pino";
-
-// const dest = ;
 
 const logger = pino({
   level: "debug",
@@ -30,21 +25,5 @@ const logger = pino({
     ],
   },
 });
-
-console.log(path.resolve(__dirname, "../../logs"));
-
-// const errorLogger = pino(
-//   {
-//     name: "error",
-//     level: "error",
-//     transport: {
-//       target: "pino-pretty",
-//       options: {
-//         colorize: true,
-//         translateTime: "SYS:standard",
-//       },
-//     },
-//   }
-// );
 
 export { logger };

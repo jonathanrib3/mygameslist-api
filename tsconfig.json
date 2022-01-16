@@ -18,12 +18,18 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/importTest/*": [
-        "./src/importTestFolder/*"
+      "@infra/*": [
+        "./src/infra/*"
+      ],
+      "@errors/*": [
+        "./src/errors/*"
+      ],
+      "@modules/*": [
+        "./src/modules/*"
       ]
     }
   },
   "include": [
-    "src/**/*"
+    "src/*"
   ]
 }
