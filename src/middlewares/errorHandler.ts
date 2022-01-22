@@ -5,8 +5,8 @@ const errorHandler = (
   error: Error,
   request: Request,
   response: Response,
-  next: NextFunction
-) => {
+  _next: NextFunction
+): Response<any, Record<string, any>> => {
   if (error instanceof AppError) {
     return response.status(error.status).send({ message: error.message });
   }
