@@ -4,10 +4,10 @@ import { User } from "@modules/accounts/models/User";
 import { IUsersRepository } from "../IUsersRepository";
 
 class UsersTestRepository implements IUsersRepository {
-  private users: User[];
+  private repository: User[];
 
   constructor() {
-    this.users = [];
+    this.repository = [];
   }
 
   create({ email, password, username, avatar }: ICreateUserDTO): User {
@@ -21,15 +21,17 @@ class UsersTestRepository implements IUsersRepository {
       created_at: new Date(),
     });
 
-    this.users.push(user);
+    this.repository.push(user);
 
     return user;
   }
 
   findByEmail(email: string): User {
-    const userToBeFound = this.users.find((user) => user.email === email);
+    return this.repository.find((user) => user.email === email);
+  }
 
-    return userToBeFound;
+  findByUsername(username: string): User {
+    return this.repository.find((user) => user.username === username);
   }
 }
 

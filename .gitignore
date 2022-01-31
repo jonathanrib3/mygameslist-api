@@ -3,3 +3,5 @@ logs
 .env
 UseCases.md
 mygameslist.drawio
+coverage
+yarn-error.log

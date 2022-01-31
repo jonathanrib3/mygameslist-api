@@ -1,8 +1,13 @@
-import { AppError } from "@errors/AppError";
+import { inject, injectable } from "tsyringe";
+
 import { User } from "@modules/accounts/models/User";
-import { passwordHashProvider } from "@modules/accounts/providers/passwordHashProvider";
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
-import { numericConstants } from "@shared/constants/numeric_constants";
+import {
+  EMAIL_ALREADY_EXISTS_ERROR,
+  USERNAME_ALREADY_EXISTS_ERROR,
+} from "@shared/constants/string_constants";
+import { AppError } from "@shared/infra/errors/AppError";
+import { passwordHashProvider } from "@shared/providers/implementations/passwordHashProvider";
 
 interface IRequest {
   username: string;
@@ -11,8 +16,12 @@ interface IRequest {
   avatar?: string;
 }
 
+@injectable()
 class CreateUserUseCase {
-  constructor(private usersRepository: IUsersRepository) {}
+  constructor(
+    @inject("UsersTestRepository")
+    private usersRepository: IUsersRepository
+  ) {}
 
   async execute({
     username,
@@ -20,19 +29,20 @@ class CreateUserUseCase {
     password,
     avatar,
   }: IRequest): Promise<User> {
-    const userAlreadyExists = this.usersRepository.findByEmail(email);
+    const emailAlreadyBeingUsed = this.usersRepository.findByEmail(email);
 
-    if (userAlreadyExists) {
-      throw new AppError(
-        400,
-        "This email is already being used by another account."
-      );
+    if (emailAlreadyBeingUsed) {
+      throw new AppError(400, EMAIL_ALREADY_EXISTS_ERROR);
     }
 
-    const hashedPassword = await passwordHashProvider(
-      password,
-      numericConstants.DEFAULT_SALT
-    );
+    const usernameAlreadyBeingUsed =
+      this.usersRepository.findByUsername(username);
+
+    if (usernameAlreadyBeingUsed) {
+      throw new AppError(400, USERNAME_ALREADY_EXISTS_ERROR);
+    }
+
+    const hashedPassword = await passwordHashProvider(password);
 
     const user = this.usersRepository.create({
       username,

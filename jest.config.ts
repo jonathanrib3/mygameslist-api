@@ -2,6 +2,8 @@ import { pathsToModuleNameMapper } from "ts-jest";
 
 import { compilerOptions } from "./tsconfig.json";
 
+import "reflect-metadata";
+
 export default {
   // All imported modules in your tests should be mocked automatically
   // automock: false,
@@ -129,7 +131,7 @@ export default {
   // setupFiles: [],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  // setupFilesAfterEnv: [],
+  setupFilesAfterEnv: ["<rootDir>/jest.config.ts"],
 
   // The number of seconds after which a test is considered as slow and reported as such in the results.
   // slowTestThreshold: 5,

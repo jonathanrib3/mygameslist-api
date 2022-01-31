@@ -1,7 +1,4 @@
+import { init } from "@infra/http/server";
 import "dotenv/config";
-import "express-async-errors";
-import { Server } from "@infra/Server";
 
-const server = new Server(process.env.SERVER_PORT);
-
-server.init();
+init();

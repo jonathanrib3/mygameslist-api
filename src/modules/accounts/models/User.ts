@@ -15,6 +15,8 @@ class User {
 
   gamesList: IGamesList;
 
+  admin: boolean;
+
   created_at: Date;
 
   constructor() {
@@ -25,6 +27,7 @@ class User {
         list: [],
       };
     }
+    this.admin = false;
   }
 }
 

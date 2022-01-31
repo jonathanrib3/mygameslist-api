@@ -18,10 +18,10 @@
     "baseUrl": ".",
     "paths": {
       "@infra/*": [
-        "./src/infra/*"
+        "src/shared/infra/*"
       ],
       "@errors/*": [
-        "./src/errors/*"
+        "src/shared/infra/errors/*"
       ],
       "@modules/*": [
         "./src/modules/*"

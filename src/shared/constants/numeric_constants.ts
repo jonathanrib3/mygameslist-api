@@ -2,4 +2,4 @@ const numericConstants = {
   DEFAULT_SALT: 10,
 };
 
-export { numericConstants };
+export const { DEFAULT_SALT } = numericConstants;
