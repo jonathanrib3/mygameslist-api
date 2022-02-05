@@ -3,11 +3,12 @@ import { container } from "tsyringe";
 
 import { UsersTestRepository } from "@modules/accounts/repositories/in-memory/UsersTestRepository";
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
-import { UUID_V4_REGEX } from "@shared/constants/regexes";
 import {
   EMAIL_ALREADY_EXISTS_ERROR,
   USERNAME_ALREADY_EXISTS_ERROR,
-} from "@shared/constants/string_constants";
+  USERNAME_LENGTH_ERROR,
+} from "@shared/constants/error_messages";
+import { UUID_V4_REGEX } from "@shared/constants/regexes";
 
 import { testApp } from "./infra/http/test_server";
 
@@ -18,7 +19,7 @@ interface IRequest {
   avatar?: string;
 }
 
-describe("create user controller tests", () => {
+describe("create user integration tests", () => {
   beforeEach(() => {
     container.registerSingleton<IUsersRepository>(
       "UsersTestRepository",
@@ -36,7 +37,7 @@ describe("create user controller tests", () => {
     const response = await request(testApp).post("/users").send({
       email: user.email,
       password: user.password,
-      username: user.password,
+      username: user.username,
     });
 
     const { id, gamesList, admin, email, password, username, created_at } =
@@ -111,5 +112,27 @@ describe("create user controller tests", () => {
     expect(response1.status).toBe(201);
     expect(response2.status).toBe(400);
     expect(response2.body).toEqual({ message: USERNAME_ALREADY_EXISTS_ERROR });
+  });
+
+  it("should not be able to create a user with username shorter than 4 characters", async () => {
+    const response = await request(testApp).post("/users").send({
+      email: "test@mygameslist.com.br",
+      password: "test123",
+      username: "tes",
+    });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ message: USERNAME_LENGTH_ERROR });
+  });
+
+  it("should not be able to create a user with username longer than 35 characters", async () => {
+    const response = await request(testApp).post("/users").send({
+      email: "test@mygameslist.com.br",
+      password: "test123",
+      username: "leeroooooooyjeeeeeeenkiiiiiiiinnnsss",
+    });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ message: USERNAME_LENGTH_ERROR });
   });
 });

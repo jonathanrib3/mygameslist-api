@@ -3,14 +3,15 @@ import { UUID_V4_REGEX } from "@shared/constants/regexes";
 import {
   EMAIL_ALREADY_EXISTS_ERROR,
   USERNAME_ALREADY_EXISTS_ERROR,
-} from "@shared/constants/string_constants";
+  USERNAME_LENGTH_ERROR,
+} from "@shared/constants/error_messages";
 
 import { CreateUserUseCase } from "../../modules/accounts/useCases/create_user/CreateUserUseCase";
 
 let usersTestRepository: UsersTestRepository;
 let createUserUseCase: CreateUserUseCase;
 
-describe("create user", () => {
+describe("create user unit tests", () => {
   beforeEach(() => {
     usersTestRepository = new UsersTestRepository();
     createUserUseCase = new CreateUserUseCase(usersTestRepository);
@@ -59,5 +60,25 @@ describe("create user", () => {
         username: "test-user666",
       });
     }).rejects.toThrow(USERNAME_ALREADY_EXISTS_ERROR);
+  });
+
+  it("should not be able to create a user with username shorter than 4 characters", async () => {
+    await expect(async () => {
+      await createUserUseCase.execute({
+        email: "test@mygameslist.com.br",
+        password: "test123",
+        username: "tes",
+      });
+    }).rejects.toThrow(USERNAME_LENGTH_ERROR);
+  });
+
+  it("should not be able to create a user with username longer than 35 characters", async () => {
+    await expect(async () => {
+      await createUserUseCase.execute({
+        email: "test@mygameslist.com.br",
+        password: "test123",
+        username: "areallyreallyreallyreallylongusername",
+      });
+    }).rejects.toThrow(USERNAME_LENGTH_ERROR);
   });
 });
