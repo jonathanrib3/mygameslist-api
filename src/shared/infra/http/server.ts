@@ -6,6 +6,7 @@ import { pinoHttp } from "pino-http";
 
 import { errorHandler } from "@shared/infra/errors/errorHandler";
 import "@shared/containers";
+import "@shared/containers/providers";
 
 import { logger } from "./logger";
 import { router } from "./routes";

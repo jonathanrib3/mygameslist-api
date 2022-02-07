@@ -46,6 +46,7 @@ class UsersTestRepository implements IUsersRepository {
     const user = await this.findById(user_id);
 
     user.avatar = avatar;
+    user.updated_at = new Date();
 
     return user;
   }

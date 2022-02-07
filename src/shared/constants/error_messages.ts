@@ -7,6 +7,7 @@ const stringConstants = {
   UPDATE_INVALID_USER_ERROR: "Invalid user to be updated.",
   INVALID_TOKEN_ERROR: "Invalid token.",
   INVALID_LOGIN_ERROR: "Invalid credentials",
+  USER_NOT_FOUND_ERROR: "User not found",
 };
 
 export const {
@@ -16,4 +17,5 @@ export const {
   UPDATE_INVALID_USER_ERROR,
   INVALID_TOKEN_ERROR,
   INVALID_LOGIN_ERROR,
+  USER_NOT_FOUND_ERROR,
 } = stringConstants;

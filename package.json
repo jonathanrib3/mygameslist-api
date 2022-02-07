@@ -5,8 +5,9 @@
   "scripts": {
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
     "start": "node dist/server.js",
-    "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules ./src/main.ts",
-    "test": "jest"
+    "dev": "ts-node-dev -r tsconfig-paths/register --respawn --no-notify --transpile-only --ignore-watch node_modules ./src/main.ts",
+    "test": "jest",
+    "test:coverage": "jest --collect-coverage"
   },
   "license": "MIT",
   "devDependencies": {

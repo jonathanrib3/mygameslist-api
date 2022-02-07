@@ -17,7 +17,7 @@ class UploadAvatarUseCase {
   ) {}
 
   async execute({ user_id, filename }: IRequest) {
-    const userExists = this.usersRepository.findById(user_id);
+    const userExists = await this.usersRepository.findById(user_id);
 
     if (!userExists) {
       throw new AppError(400, UPDATE_INVALID_USER_ERROR);

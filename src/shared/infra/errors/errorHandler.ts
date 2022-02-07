@@ -11,7 +11,7 @@ function errorHandler(
   if (error instanceof AppError) {
     return response.status(error.status).send({ message: error.message });
   }
-
+  console.log(error);
   return response.status(500).send({ message: "Server internal error" });
 }
 

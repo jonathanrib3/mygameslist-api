@@ -1,0 +1,13 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.passwordHashProvider = void 0;
+const numeric_constants_1 = require("@shared/constants/numeric_constants");
+const bcrypt_1 = __importDefault(require("bcrypt"));
+async function passwordHashProvider(password, salt = numeric_constants_1.DEFAULT_SALT) {
+    const hash = await bcrypt_1.default.hash(password, salt);
+    return hash;
+}
+exports.passwordHashProvider = passwordHashProvider;
