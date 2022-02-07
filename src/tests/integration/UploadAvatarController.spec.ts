@@ -20,6 +20,7 @@ describe("upload avatar integration tests", () => {
       password: "test123",
     });
   });
+
   it("should be able to upload avatar with an authenticated user", async () => {
     const { token } = token_response.body;
 
@@ -35,6 +36,7 @@ describe("upload avatar integration tests", () => {
     expect(response.body.updated_at).not.toBe(response.body.created_at);
     expect(response.body.avatar).toBeDefined();
   });
+
   it("should not be able to upload avatar with an not authenticated user", async () => {
     const filepath = resolve(__dirname, "..", "./integration", "./images");
 

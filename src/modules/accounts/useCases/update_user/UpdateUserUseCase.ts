@@ -1,11 +1,13 @@
+import { inject, injectable } from "tsyringe";
+
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
 import {
   UPDATE_INVALID_USER_ERROR,
   USERNAME_ALREADY_EXISTS_ERROR,
   USERNAME_LENGTH_ERROR,
 } from "@shared/constants/error_messages";
-import { AppError } from "@shared/infra/errors/AppError";
 import { passwordHashProvider } from "@shared/containers/providers/implementations/passwordHashProvider";
+import { AppError } from "@shared/infra/errors/AppError";
 
 interface IRequest {
   id: string;
@@ -13,8 +15,12 @@ interface IRequest {
   password?: string;
 }
 
+@injectable()
 class UpdateUserUseCase {
-  constructor(private usersRepository: IUsersRepository) {}
+  constructor(
+    @inject("UsersTestRepository")
+    private usersRepository: IUsersRepository
+  ) {}
 
   async execute({ id, username, password }: IRequest) {
     const userExists = await this.usersRepository.findById(id);
