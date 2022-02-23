@@ -1,6 +1,6 @@
 node_modules
 logs
-.env
+*.env
 UseCases.md
 mygameslist.drawio
 coverage

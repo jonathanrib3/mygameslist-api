@@ -1,4 +1,4 @@
-import "dotenv/config";
+import "../../../../../config.js";
 
 import { sign, verify } from "jsonwebtoken";
 

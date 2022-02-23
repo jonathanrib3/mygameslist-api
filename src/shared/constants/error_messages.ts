@@ -8,6 +8,7 @@ const stringConstants = {
   INVALID_TOKEN_ERROR: "Invalid token.",
   INVALID_LOGIN_ERROR: "Invalid credentials",
   USER_NOT_FOUND_ERROR: "User not found",
+  NOT_EXPIRED_EXISTENT_TOKEN: "Non expired token already exists",
 };
 
 export const {
@@ -18,4 +19,5 @@ export const {
   INVALID_TOKEN_ERROR,
   INVALID_LOGIN_ERROR,
   USER_NOT_FOUND_ERROR,
+  NOT_EXPIRED_EXISTENT_TOKEN,
 } = stringConstants;

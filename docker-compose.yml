@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+  local_database:
+    image: mongo
+    container_name: mongo_container
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=docker
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    ports:
+      - 27017:27017
+    volumes:
+      - data:/usr/mongodb/mygameslist_local
+
+volumes:
+  data:
+
+    

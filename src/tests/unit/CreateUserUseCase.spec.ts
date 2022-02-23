@@ -28,7 +28,7 @@ describe("create user unit tests", () => {
     expect(newUser.username).toBeDefined();
     expect(newUser.password).toBeDefined();
     expect(newUser.id).toMatch(UUID_V4_REGEX);
-    expect(newUser).toHaveProperty("created_at");
+    expect(newUser.created_at).toBeDefined();
   });
 
   it("should not be able to create a user with same email", async () => {
@@ -51,13 +51,13 @@ describe("create user unit tests", () => {
       await createUserUseCase.execute({
         email: "test@mygameslist.com.br",
         password: "test123",
-        username: "test-user666",
+        username: "test-user",
       });
 
       await createUserUseCase.execute({
         email: "different_test@mygameslist.com.br",
         password: "test321",
-        username: "test-user666",
+        username: "test-user",
       });
     }).rejects.toThrow(USERNAME_ALREADY_EXISTS_ERROR);
   });

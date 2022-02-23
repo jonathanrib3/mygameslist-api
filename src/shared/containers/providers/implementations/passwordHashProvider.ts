@@ -1,9 +1,9 @@
-import { DEFAULT_SALT } from "@shared/constants/numeric_constants";
 import bcrypt from "bcrypt";
+import process from "process";
 
 async function passwordHashProvider(
   password: string,
-  salt = DEFAULT_SALT
+  salt = Number(process.env.BCRYPT_HASH)
 ): Promise<string> {
   const hash = await bcrypt.hash(password, salt);
 

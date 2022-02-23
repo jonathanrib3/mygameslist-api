@@ -1,3 +1,4 @@
+import { User } from "@modules/accounts/models/User";
 import { UsersTestRepository } from "@modules/accounts/repositories/in-memory/UsersTestRepository";
 import { CreateSessionUseCase } from "@modules/accounts/useCases/create_session/CreateSessionUseCase";
 import { CreateUserUseCase } from "@modules/accounts/useCases/create_user/CreateUserUseCase";
@@ -10,8 +11,10 @@ let jwtProvider: JwtProvider;
 let createSessionUseCase: CreateSessionUseCase;
 let createUserUseCase: CreateUserUseCase;
 
-describe("create session unit tests", () => {
-  beforeEach(() => {
+let user: User;
+
+describe("create session unit test", () => {
+  beforeEach(async () => {
     usersTestRepository = new UsersTestRepository();
     jwtProvider = new JwtProvider();
     createSessionUseCase = new CreateSessionUseCase(
@@ -19,15 +22,15 @@ describe("create session unit tests", () => {
       jwtProvider
     );
     createUserUseCase = new CreateUserUseCase(usersTestRepository);
-  });
 
-  it("should be able to generate a new token with valid user infos", async () => {
-    const user = await createUserUseCase.execute({
+    user = await createUserUseCase.execute({
       email: "test@mygameslist.com",
       username: "macomaco",
       password: "testpsswd",
     });
+  });
 
+  it("should be able to generate a new token with valid user infos", async () => {
     const token = await createSessionUseCase.execute({
       email: user.email,
       password: "testpsswd",
@@ -38,12 +41,6 @@ describe("create session unit tests", () => {
 
   it("should not be able to generate a new token with invalid email", async () => {
     await expect(async () => {
-      await createUserUseCase.execute({
-        email: "test@mygameslist.com",
-        username: "macomaco",
-        password: "testpsswd",
-      });
-
       await createSessionUseCase.execute({
         email: "test@mygameslist.com.br",
         password: "testpsswd",
@@ -53,12 +50,6 @@ describe("create session unit tests", () => {
 
   it("should not be able to generate a new token with invalid password", async () => {
     await expect(async () => {
-      await createUserUseCase.execute({
-        email: "test@mygameslist.com",
-        username: "macomaco",
-        password: "testpsswd",
-      });
-
       await createSessionUseCase.execute({
         email: "test@mygameslist.com",
         password: "testpsswdd",

@@ -1,5 +1,6 @@
 const numericConstants = {
-  DEFAULT_SALT: 10,
+  TOKEN_EXPIRATION_TIME: 1800000,
+  TOKEN_RANDOM_BYTES: 32,
 };
 
-export const { DEFAULT_SALT } = numericConstants;
+export const { TOKEN_EXPIRATION_TIME, TOKEN_RANDOM_BYTES } = numericConstants;

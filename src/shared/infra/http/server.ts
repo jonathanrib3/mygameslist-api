@@ -8,10 +8,14 @@ import { errorHandler } from "@shared/infra/errors/errorHandler";
 import "@shared/containers";
 import "@shared/containers/providers";
 
+import { Connection } from "@infra/database/Connection";
+
 import { logger } from "./logger";
 import { router } from "./routes";
 
-function init() {
+function httpInit() {
+  const connection = new Connection();
+  connection.create();
   const PORT = process.env.SERVER_PORT;
   const app = express();
 
@@ -25,4 +29,4 @@ function init() {
   });
 }
 
-export { init };
+export { httpInit };

@@ -1,3 +1,4 @@
+import { User } from "@modules/accounts/models/User";
 import { UsersTestRepository } from "@modules/accounts/repositories/in-memory/UsersTestRepository";
 import { CreateUserUseCase } from "@modules/accounts/useCases/create_user/CreateUserUseCase";
 import { UpdateUserUseCase } from "@modules/accounts/useCases/update_user/UpdateUserUseCase";
@@ -10,20 +11,22 @@ let usersTestRepository: UsersTestRepository;
 let createUserUseCase: CreateUserUseCase;
 let updateUserUseCase: UpdateUserUseCase;
 
+let user: User;
+
 describe("update user unit tests", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     usersTestRepository = new UsersTestRepository();
     createUserUseCase = new CreateUserUseCase(usersTestRepository);
     updateUserUseCase = new UpdateUserUseCase(usersTestRepository);
-  });
 
-  it("should be able to update user's username", async () => {
-    const user = await createUserUseCase.execute({
+    user = await createUserUseCase.execute({
       email: "test@mygameslist.com",
       username: "test902",
       password: "sooos3",
     });
+  });
 
+  it("should be able to update user's username", async () => {
     const oldUsername = user.username;
 
     await updateUserUseCase.execute({
@@ -35,11 +38,6 @@ describe("update user unit tests", () => {
   });
 
   it("should be able to update user's password", async () => {
-    const user = await createUserUseCase.execute({
-      email: "test@mygameslist.com",
-      username: "test902",
-      password: "sooos3",
-    });
     const oldPassword = user.password;
 
     await updateUserUseCase.execute({
@@ -52,12 +50,6 @@ describe("update user unit tests", () => {
   });
 
   it("should be able to update both user's password and username", async () => {
-    const user = await createUserUseCase.execute({
-      email: "test@mygameslist.com",
-      username: "test902",
-      password: "sooos3",
-    });
-
     const oldData = {
       username: user.username,
       password: user.password,
@@ -75,12 +67,6 @@ describe("update user unit tests", () => {
 
   it("should not be able to update user's username to another one that's already in use", async () => {
     await expect(async () => {
-      const user = await createUserUseCase.execute({
-        email: "test@mygameslist.com",
-        username: "test902",
-        password: "sooos3",
-      });
-
       await createUserUseCase.execute({
         email: "test2@mygameslist.com",
         username: "test222",
@@ -96,12 +82,6 @@ describe("update user unit tests", () => {
 
   it("should not be able to update user's username to another one that's shorter than 4 characters", async () => {
     await expect(async () => {
-      const user = await createUserUseCase.execute({
-        email: "test@mygameslist.com",
-        username: "test321",
-        password: "sooos3",
-      });
-
       await updateUserUseCase.execute({
         id: user.id,
         username: "tes",

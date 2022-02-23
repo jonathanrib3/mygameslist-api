@@ -1,4 +1,5 @@
-import { init } from "@infra/http/server";
-import "dotenv/config";
+import { httpInit } from "@infra/http/server";
 
-init();
+import "../config.js";
+
+httpInit();
