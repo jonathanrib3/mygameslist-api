@@ -32,7 +32,7 @@ describe("password reset unit tests", () => {
   it("should be able to generate a new token if it doesn't exists", async () => {
     const data = await createResetPasswordTokenUseCase.execute(user.email);
 
-    expect(data.token.length).toBe(64);
+    expect(data.token_id.length).toBe(64);
     expect(data.user_id).toMatch(UUID_V4_REGEX);
   });
 

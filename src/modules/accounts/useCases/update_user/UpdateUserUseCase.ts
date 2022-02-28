@@ -1,3 +1,5 @@
+import bcrypt from "bcrypt";
+
 import { inject, injectable } from "tsyringe";
 
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
@@ -6,7 +8,7 @@ import {
   USERNAME_ALREADY_EXISTS_ERROR,
   USERNAME_LENGTH_ERROR,
 } from "@shared/constants/error_messages";
-import { passwordHashProvider } from "@shared/containers/providers/implementations/passwordHashProvider";
+
 import { AppError } from "@shared/infra/errors/AppError";
 
 interface IRequest {
@@ -44,7 +46,7 @@ class UpdateUserUseCase {
     }
 
     const hashedNewPassword = password
-      ? await passwordHashProvider(password)
+      ? bcrypt.hashSync(password, process.env.BCRYPT_SALT)
       : undefined;
 
     const update = await this.usersRepository.update({

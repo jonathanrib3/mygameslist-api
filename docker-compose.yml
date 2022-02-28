@@ -1,12 +1,24 @@
 version: '3.7'
 services:
+  local_token_database:
+    image: redis
+    container_name: redis_container
+    environment:
+      - REDIS_DATABASE=$REDIS_PASSWORD
+    ports: 
+      - 6379:6379
+    command: > 
+      redis-server --requirepass $REDIS_PASSWORD
+
+    restart: always
+
   local_database:
     image: mongo
     container_name: mongo_container
     restart: always
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=docker
-      - MONGO_INITDB_ROOT_PASSWORD=root
+      - MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD
     ports:
       - 27017:27017
     volumes:

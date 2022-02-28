@@ -1,3 +1,6 @@
+import "../../../../../config.js";
+
+import bcrypt from "bcrypt";
 import { inject, injectable } from "tsyringe";
 
 import { User } from "@modules/accounts/models/User";
@@ -8,7 +11,6 @@ import {
   USERNAME_LENGTH_ERROR,
 } from "@shared/constants/error_messages";
 import { AppError } from "@shared/infra/errors/AppError";
-import { passwordHashProvider } from "@shared/containers/providers/implementations/passwordHashProvider";
 
 interface IRequest {
   username: string;
@@ -48,7 +50,10 @@ class CreateUserUseCase {
       throw new AppError(400, USERNAME_LENGTH_ERROR);
     }
 
-    const hashedPassword = await passwordHashProvider(password);
+    const hashedPassword = await bcrypt.hashSync(
+      password,
+      Number(process.env.BCRYPT_SALT)
+    );
 
     const user = await this.usersRepository.create({
       username,

@@ -1,4 +1,4 @@
-import Mail from "nodemailer/lib/mailer";
+import { Transporter } from "nodemailer";
 
 import { transporter } from "@infra/smtp/smtp_transporter";
 
@@ -6,7 +6,7 @@ import { IEMailSentDTO } from "../dtos/IEmailSentDTO";
 import { IMailProvider } from "../IMailProvider";
 
 class NodeMailerMailProvider implements IMailProvider {
-  private mail_transporter: Mail;
+  private mail_transporter: Transporter;
 
   constructor() {
     this.mail_transporter = transporter;

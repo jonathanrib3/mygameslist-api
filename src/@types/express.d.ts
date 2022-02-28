@@ -4,5 +4,9 @@ declare namespace Express {
     user: {
       id: string;
     };
+    reset_token: {
+      token_id: string;
+      user_id: string;
+    };
   }
 }

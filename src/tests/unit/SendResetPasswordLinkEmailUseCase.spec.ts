@@ -7,7 +7,7 @@ import { CreateResetPasswordTokenUseCase } from "@modules/accounts/useCases/crea
 import { CreateUserUseCase } from "@modules/accounts/useCases/create_user/CreateUserUseCase";
 import { SendResetPasswordLinkEmailUseCase } from "@modules/accounts/useCases/send_reset_password_link_email/SendResetPasswordLinkEmailUseCase";
 import { USER_NOT_FOUND_ERROR } from "@shared/constants/error_messages";
-import { EMAIL_OK_STATUS_RESPONSE_REGEX } from "@shared/constants/regexes";
+import { EMAIL_SUCCESSFULLY_SENT } from "@shared/constants/successful_messages";
 import { NodeMailerMailProvider } from "@shared/containers/providers/implementations/NodeMailerMailProvider";
 
 let usersTestRepository: UsersTestRepository;
@@ -18,7 +18,7 @@ let sendResetPasswordLinkEmail: SendResetPasswordLinkEmailUseCase;
 let nodemailerMailProvider: NodeMailerMailProvider;
 let user: User;
 let token_data: {
-  token: string;
+  token_id: string;
   user_id: string;
 };
 
@@ -50,23 +50,21 @@ describe("send reset password email unit tests", () => {
   });
 
   it("should be able to send an email with reset password link to user", async () => {
-    const { token, user_id } = token_data;
+    const { token_id, user_id } = token_data;
     const message = await sendResetPasswordLinkEmail.execute({
-      token,
+      token_id,
       user_id,
     });
 
-    expect(message.accepted).toEqual([user.email]);
-    expect(message.rejected.length).toBe(0);
-    expect(message.response).toMatch(EMAIL_OK_STATUS_RESPONSE_REGEX);
+    expect(message).toBe(EMAIL_SUCCESSFULLY_SENT);
   });
 
   it("should not be able to send email with invalid user id", async () => {
     expect(async () => {
-      const { token } = token_data;
+      const { token_id } = token_data;
       const fake_id = v4();
 
-      await sendResetPasswordLinkEmail.execute({ token, user_id: fake_id });
+      await sendResetPasswordLinkEmail.execute({ token_id, user_id: fake_id });
     }).rejects.toThrow(USER_NOT_FOUND_ERROR);
   });
 });

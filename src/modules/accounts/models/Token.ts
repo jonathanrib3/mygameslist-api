@@ -1,7 +1,7 @@
 class Token {
-  user_id: string;
+  id: string;
 
-  token: string;
+  user_id: string;
 
   created_at: Date;
 
