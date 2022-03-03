@@ -12,6 +12,9 @@ const stringConstants = {
   TOKEN_NOT_FOUND_ERROR: "Token not found.",
   EMAIL_NOT_SENT_ERROR:
     "Email couldn't be sent. Please make sure this is a valid email.",
+  EXISTENT_NON_EXPIRED_SESSION_ERROR: "Non expired session already exists.",
+  INTERNAL_SERVER_ERROR:
+    "Something went wrong in the server. Please, try again later",
 };
 
 export const {
@@ -25,4 +28,6 @@ export const {
   EXPIRED_TOKEN_ERROR,
   TOKEN_NOT_FOUND_ERROR,
   EMAIL_NOT_SENT_ERROR,
+  EXISTENT_NON_EXPIRED_SESSION_ERROR,
+  INTERNAL_SERVER_ERROR,
 } = stringConstants;

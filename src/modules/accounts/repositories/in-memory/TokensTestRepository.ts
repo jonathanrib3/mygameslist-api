@@ -51,7 +51,7 @@ class TokensTestRepository implements ITokensRepository {
     -- METHOD FOR TEST-ONLY PURPOSES --
     
   Forces a token to be expired by making the expiring date to
-   be 30 minutes late comparing to the actual date.
+   be 10 minutes late comparing to the actual date.
   */
   async setTokenToExpired(hashed_token_id: string) {
     const token_update = await this.findByToken(hashed_token_id);

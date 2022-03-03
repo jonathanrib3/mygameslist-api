@@ -1,9 +1,11 @@
 import { v4 } from "uuid";
 
-class Session {
+class ResetSession {
   id: string;
 
   user_id: string;
+
+  created_at: Date;
 
   expires_in: number;
 
@@ -14,4 +16,4 @@ class Session {
   }
 }
 
-export { Session };
+export { ResetSession };

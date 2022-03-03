@@ -63,6 +63,7 @@
     "pino": "^7.6.3",
     "pino-http": "^6.5.0",
     "pino-pretty": "^7.3.0",
+    "redis": "^4.0.4",
     "reflect-metadata": "^0.1.13",
     "smtp-server": "^3.9.0",
     "supertest": "^6.2.1",

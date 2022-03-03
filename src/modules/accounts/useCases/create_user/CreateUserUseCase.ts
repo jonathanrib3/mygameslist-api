@@ -5,11 +5,7 @@ import { inject, injectable } from "tsyringe";
 
 import { User } from "@modules/accounts/models/User";
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
-import {
-  EMAIL_ALREADY_EXISTS_ERROR,
-  USERNAME_ALREADY_EXISTS_ERROR,
-  USERNAME_LENGTH_ERROR,
-} from "@shared/constants/error_messages";
+import { USERNAME_LENGTH_ERROR } from "@shared/constants/error_messages";
 import { AppError } from "@shared/infra/errors/AppError";
 
 interface IRequest {
@@ -32,21 +28,7 @@ class CreateUserUseCase {
     password,
     avatar,
   }: IRequest): Promise<User> {
-    const emailAlreadyBeingUsed = await this.usersRepository.findByEmail(email);
-
-    if (emailAlreadyBeingUsed) {
-      throw new AppError(400, EMAIL_ALREADY_EXISTS_ERROR);
-    }
-
-    const usernameAlreadyBeingUsed = await this.usersRepository.findByUsername(
-      username
-    );
-
-    if (usernameAlreadyBeingUsed) {
-      throw new AppError(400, USERNAME_ALREADY_EXISTS_ERROR);
-    }
-
-    if (username.length < 4 || username.length > 35) {
+    if (this.isUsernameLengthValid(username)) {
       throw new AppError(400, USERNAME_LENGTH_ERROR);
     }
 
@@ -63,6 +45,10 @@ class CreateUserUseCase {
     });
 
     return user;
+  }
+
+  isUsernameLengthValid(username: string) {
+    return username.length < 4 || username.length > 35;
   }
 }
 
