@@ -12,7 +12,7 @@ interface IRequest {
 }
 
 @injectable()
-class CreateSessionUseCase {
+class CreateAuthSessionUseCase {
   constructor(
     @inject("UsersTestRepository")
     private usersRepository: IUsersRepository,
@@ -41,4 +41,4 @@ class CreateSessionUseCase {
   }
 }
 
-export { CreateSessionUseCase };
+export { CreateAuthSessionUseCase };

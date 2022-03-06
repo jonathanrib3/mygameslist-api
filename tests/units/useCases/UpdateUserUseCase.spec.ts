@@ -1,5 +1,7 @@
 import bcrypt from "bcrypt";
+import { v4 } from "uuid";
 
+import { AppError } from "@infra/errors/AppError";
 import { User } from "@modules/accounts/models/User";
 import { UsersTestRepository } from "@modules/accounts/repositories/in-memory/UsersTestRepository";
 import { UpdateUserUseCase } from "@modules/accounts/useCases/update_user/UpdateUserUseCase";
@@ -7,8 +9,6 @@ import {
   USERNAME_ALREADY_EXISTS_ERROR,
   USERNAME_LENGTH_ERROR,
 } from "@shared/constants/error_messages";
-import { v4 } from "uuid";
-import { AppError } from "@infra/errors/AppError";
 
 jest.mock("@modules/accounts/repositories/in-memory/UsersTestRepository");
 jest.mock("bcrypt");

@@ -135,6 +135,10 @@ class UsersTestRepository implements IUsersRepository {
   async updateAvatar(user_id: string, avatar: string): Promise<User> {
     const user = await this.findById(user_id);
 
+    if (!user) {
+      throw new AppError(400, UPDATE_INVALID_USER_ERROR);
+    }
+
     user.avatar = avatar;
     user.updated_at = new Date();
 

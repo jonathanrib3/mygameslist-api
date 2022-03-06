@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
-import { CreateSessionUseCase } from "@modules/accounts/useCases/create_session/CreateSessionUseCase";
+import { CreateSessionUseCase } from "@modules/accounts/useCases/create_auth_session/CreateAuthSessionUseCase";
 
 class CreateSessionController {
   async handle(

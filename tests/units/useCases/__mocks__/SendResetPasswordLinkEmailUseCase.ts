@@ -1,10 +1,3 @@
-import "../../../../../config.js";
-import bcrypt from "bcrypt";
-import fs from "fs";
-import { compile } from "handlebars";
-import path from "path";
-import { inject, injectable } from "tsyringe";
-
 import { AppError } from "@infra/errors/AppError";
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
 import {
@@ -20,12 +13,9 @@ interface IRequest {
   user_id: string;
 }
 
-@injectable()
 class SendResetPasswordLinkEmailUseCase {
   constructor(
-    @inject("UsersTestRepository")
     private usersRepository: IUsersRepository,
-    @inject("NodeMailerMailProvider")
     private mailProvider: IMailProvider
   ) {}
 
@@ -36,10 +26,7 @@ class SendResetPasswordLinkEmailUseCase {
       throw new AppError(401, USER_NOT_FOUND_ERROR);
     }
 
-    const link = `${process.env.BASE_URL}/resetPassword?token=${bcrypt.hashSync(
-      token_id,
-      Number(process.env.BCRYPT_SALT)
-    )}`;
+    const link = `${process.env.BASE_URL}/resetPassword?token=${token_id}`;
 
     const email_content = this.generateHtmlEmail(user.username, link);
 
@@ -49,13 +36,9 @@ class SendResetPasswordLinkEmailUseCase {
       "Reset Password Service"
     );
 
-    const { accepted, rejected, response } = email_sent_response_data;
+    const { response } = email_sent_response_data;
 
-    if (
-      !response.match(EMAIL_OK_STATUS_RESPONSE_REGEX) ||
-      accepted.length === 0 ||
-      rejected.length > 0
-    ) {
+    if (!response.match(EMAIL_OK_STATUS_RESPONSE_REGEX)) {
       throw new AppError(400, EMAIL_NOT_SENT_ERROR);
     }
 
@@ -63,21 +46,7 @@ class SendResetPasswordLinkEmailUseCase {
   }
 
   private generateHtmlEmail(username: string, link: string) {
-    const htmlTemplateSource = fs.readFileSync(
-      path.resolve(
-        __dirname,
-        "..",
-        "..",
-        "..",
-        "..",
-        "./shared/infra/smtp/templates/reset_password_template.hbs"
-      ),
-      "utf-8"
-    );
-
-    const template = compile(htmlTemplateSource);
-
-    return template({ username, link });
+    return `<p>Hello, ${username}, here's your link: ${link}</p>`;
   }
 }
 
