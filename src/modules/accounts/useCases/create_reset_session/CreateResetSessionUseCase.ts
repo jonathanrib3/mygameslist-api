@@ -1,4 +1,5 @@
 import { AppError } from "@infra/errors/AppError";
+import { ResetSession } from "@modules/accounts/models/ResetSession";
 import { ISessionsRepository } from "@modules/accounts/repositories/ISessionsRepository";
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
 import { USER_NOT_FOUND_ERROR } from "@shared/constants/error_messages";
@@ -9,7 +10,7 @@ class CreateResetSessionUseCase {
     private sessionsRepository: ISessionsRepository
   ) {}
 
-  async execute(user_id: string): Promise<string> {
+  async execute(user_id: string): Promise<ResetSession> {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {

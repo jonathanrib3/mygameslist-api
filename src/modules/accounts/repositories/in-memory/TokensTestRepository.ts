@@ -1,25 +1,27 @@
+import "../../../../../config.js";
+
 import bcrypt from "bcrypt";
 
-import { Token } from "@modules/accounts/models/Token";
-import { TOKEN_EXPIRATION_TIME } from "@shared/constants/numeric_constants";
+import { ResetToken } from "@modules/accounts/models/ResetToken";
 
 import { ITokensRepository } from "../ITokensRepository";
 
 class TokensTestRepository implements ITokensRepository {
-  private repository: Token[];
+  private repository: ResetToken[];
 
   constructor() {
     this.repository = [];
   }
 
-  create(token_id: string, user_id: string): void {
-    const new_token = new Token();
+  async create(token_id: string, user_id: string): Promise<IResetTokenInfo> {
+    const new_token = new ResetToken();
 
     Object.assign(new_token, {
       user_id,
       id: token_id,
       created_at: new Date(),
-      expires_in: new Date().getTime() + TOKEN_EXPIRATION_TIME,
+      expires_in:
+        new Date().getTime() + Number(process.env.TOKEN_EXPIRATION_TIME),
     });
 
     if (this.findByUserId(user_id)) {
@@ -27,9 +29,16 @@ class TokensTestRepository implements ITokensRepository {
     }
 
     this.repository.push(new_token);
+
+    const token_info: IResetTokenInfo = {
+      token_id: new_token.id,
+      user_id,
+    };
+
+    return token_info;
   }
 
-  async findByUserId(user_id: string): Promise<Token> {
+  async findByUserId(user_id: string): Promise<ResetToken> {
     return this.repository.find((token) => token.user_id === user_id);
   }
 
@@ -41,7 +50,7 @@ class TokensTestRepository implements ITokensRepository {
     this.repository = new_array_with_deleted_token;
   }
 
-  async findByToken(hashed_token_id: string): Promise<Token> {
+  async findByToken(hashed_token_id: string): Promise<ResetToken> {
     return this.repository.find((token) =>
       bcrypt.compareSync(token.id, hashed_token_id)
     );
@@ -56,7 +65,8 @@ class TokensTestRepository implements ITokensRepository {
   async setTokenToExpired(hashed_token_id: string) {
     const token_update = await this.findByToken(hashed_token_id);
     token_update.expires_in =
-      token_update.created_at.getTime() - TOKEN_EXPIRATION_TIME;
+      token_update.created_at.getTime() -
+      Number(process.env.TOKEN_EXPIRATION_TIME);
   }
 }
 

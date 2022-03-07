@@ -1,10 +1,11 @@
 import { v4 } from "uuid";
 
 import { AppError } from "@infra/errors/AppError";
-import { User } from "@modules/accounts/models/User";
 import { UsersTestRepository } from "@modules/accounts/repositories/in-memory/UsersTestRepository";
 import { UploadAvatarUseCase } from "@modules/accounts/useCases/upload_avatar/UploadAvatarUseCase";
 import { UPDATE_INVALID_USER_ERROR } from "@shared/constants/error_messages";
+
+import { user } from "./dummies/default_user_dummy";
 
 jest.mock("@modules/accounts/repositories/in-memory/UsersTestRepository");
 
@@ -18,16 +19,6 @@ describe("Upload Avatar Use Case", () => {
   });
 
   it("should be able to store the image filename", async () => {
-    const user = new User();
-
-    Object.assign(user, {
-      email: "test@mygameslist.com.br",
-      password: "test123",
-      username: "test-user",
-      created_at: new Date(),
-      updated_at: new Date(),
-    });
-
     const filename = "random_avatar.png";
 
     (<jest.Mock>usersTestRepository.updateAvatar).mockReturnValue({

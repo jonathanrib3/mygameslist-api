@@ -1,7 +1,6 @@
 import { AppError } from "@infra/errors/AppError";
 import { ResetSession } from "@modules/accounts/models/ResetSession";
 import { EXISTENT_NON_EXPIRED_SESSION_ERROR } from "@shared/constants/error_messages";
-import { SESSION_CREATED_SUCCESSFULLY } from "@shared/constants/successful_messages";
 
 import { ISessionsRepository } from "../ISessionsRepository";
 
@@ -12,7 +11,7 @@ class ResetSessionsTestRepository implements ISessionsRepository {
     this.repository = [];
   }
 
-  async create(user_id: string): Promise<string> {
+  async create(user_id: string): Promise<ResetSession> {
     const sessionAlreadyExists = await this.findByUserId(user_id);
 
     if (sessionAlreadyExists) {
@@ -34,7 +33,7 @@ class ResetSessionsTestRepository implements ISessionsRepository {
 
     this.repository.push(new_session);
 
-    return SESSION_CREATED_SUCCESSFULLY;
+    return new_session;
   }
 
   async findByUserId(user_id: string): Promise<ResetSession> {

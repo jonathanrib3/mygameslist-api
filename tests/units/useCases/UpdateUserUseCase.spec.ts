@@ -2,13 +2,14 @@ import bcrypt from "bcrypt";
 import { v4 } from "uuid";
 
 import { AppError } from "@infra/errors/AppError";
-import { User } from "@modules/accounts/models/User";
 import { UsersTestRepository } from "@modules/accounts/repositories/in-memory/UsersTestRepository";
 import { UpdateUserUseCase } from "@modules/accounts/useCases/update_user/UpdateUserUseCase";
 import {
   USERNAME_ALREADY_EXISTS_ERROR,
   USERNAME_LENGTH_ERROR,
 } from "@shared/constants/error_messages";
+
+import { user } from "./dummies/default_user_dummy";
 
 jest.mock("@modules/accounts/repositories/in-memory/UsersTestRepository");
 jest.mock("bcrypt");
@@ -23,17 +24,6 @@ describe("Update User Use Case", () => {
   });
 
   it("should be able to update user's username", async () => {
-    const user = new User();
-
-    Object.assign(user, {
-      email: "test@mygameslist.com.br",
-      password: "test123",
-      username: "test-user",
-      avatar: "test-avatar",
-      created_at: new Date(),
-      updated_at: new Date(),
-    });
-
     const newusername = "newusername!132";
 
     (<jest.Mock>usersTestRepository.update).mockReturnValue({
@@ -60,17 +50,6 @@ describe("Update User Use Case", () => {
   });
 
   it("should be able to update user's password", async () => {
-    const user = new User();
-
-    Object.assign(user, {
-      email: "test@mygameslist.com.br",
-      password: "test123",
-      username: "test-user",
-      avatar: "test-avatar",
-      created_at: new Date(),
-      updated_at: new Date(),
-    });
-
     const newpassword = "newpsswd!321";
 
     (<jest.Mock>bcrypt.hashSync).mockReturnValue(newpassword);
@@ -99,17 +78,6 @@ describe("Update User Use Case", () => {
   });
 
   it("should be able to update both user's password and username", async () => {
-    const user = new User();
-
-    Object.assign(user, {
-      email: "test@mygameslist.com.br",
-      password: "test123",
-      username: "test-user",
-      avatar: "test-avatar",
-      created_at: new Date(),
-      updated_at: new Date(),
-    });
-
     const newusername = "newusername!132";
     const newpassword = "newpsswd!321";
 

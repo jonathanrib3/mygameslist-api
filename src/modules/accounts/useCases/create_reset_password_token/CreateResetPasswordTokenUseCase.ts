@@ -1,11 +1,11 @@
+import "../../../../../config.js";
 import crypto from "crypto";
+import { inject, injectable } from "tsyringe";
 
 import { AppError } from "@infra/errors/AppError";
 import { ITokensRepository } from "@modules/accounts/repositories/ITokensRepository";
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
 import { USER_NOT_FOUND_ERROR } from "@shared/constants/error_messages";
-import { TOKEN_RANDOM_BYTES } from "@shared/constants/numeric_constants";
-import { inject, injectable } from "tsyringe";
 
 interface IResponse {
   token_id: string;
@@ -28,14 +28,13 @@ class CreateResetPasswordTokenUseCase {
       throw new AppError(401, USER_NOT_FOUND_ERROR);
     }
 
-    const token_id = crypto.randomBytes(TOKEN_RANDOM_BYTES).toString("hex");
+    const token_id = crypto
+      .randomBytes(Number(process.env.TOKEN_RANDOM_BYTES))
+      .toString("hex");
 
-    await this.tokensRepository.create(token_id, user.id);
+    const created_token = await this.tokensRepository.create(token_id, user.id);
 
-    return {
-      token_id,
-      user_id: user.id,
-    };
+    return created_token;
   }
 }
 

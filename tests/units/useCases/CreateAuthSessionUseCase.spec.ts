@@ -1,11 +1,12 @@
 import bcrypt from "bcrypt";
 
 import { AppError } from "@infra/errors/AppError";
-import { User } from "@modules/accounts/models/User";
 import { UsersTestRepository } from "@modules/accounts/repositories/in-memory/UsersTestRepository";
 import { CreateAuthSessionUseCase } from "@modules/accounts/useCases/create_auth_session/CreateAuthSessionUseCase";
 import { INVALID_LOGIN_ERROR } from "@shared/constants/error_messages";
 import { JwtProvider } from "@shared/containers/providers/implementations/JwtProvider";
+
+import { user } from "./dummies/default_user_dummy";
 
 jest.mock("@modules/accounts/repositories/in-memory/UsersTestRepository");
 jest.mock("@shared/containers/providers/implementations/JwtProvider");
@@ -26,31 +27,7 @@ describe("create session unit test", () => {
   });
 
   it("should be able to generate a new token with valid user infos", async () => {
-    const user = new User();
-
-    Object.assign(user, {
-      email: "test@mygameslist.com.br",
-      password: "test123",
-      username: "test-user",
-      avatar: "test-avatar",
-      created_at: new Date(),
-      updated_at: new Date(),
-    });
-
-    (<jest.Mock>usersTestRepository.findByEmail).mockReturnValue({
-      id: user.id,
-      email: user.email,
-      password: user.password,
-      username: user.username,
-      avatar: user.avatar,
-      gamesList: {
-        id: user.gamesList.id,
-        list: [],
-      },
-      admin: user.admin,
-      created_at: user.created_at,
-      updated_at: new Date(),
-    });
+    (<jest.Mock>usersTestRepository.findByEmail).mockReturnValue(user);
 
     (<jest.Mock>bcrypt.compare).mockReturnValue(true);
 

@@ -1,5 +1,4 @@
 import { AppError } from "@infra/errors/AppError";
-import { User } from "@modules/accounts/models/User";
 import { UsersTestRepository } from "@modules/accounts/repositories/in-memory/UsersTestRepository";
 import { CreateUserUseCase } from "@modules/accounts/useCases/create_user/CreateUserUseCase";
 import {
@@ -8,6 +7,8 @@ import {
   USERNAME_LENGTH_ERROR,
 } from "@shared/constants/error_messages";
 import { VALID_USER_DATA_MESSAGE } from "@shared/constants/successful_messages";
+
+import { user } from "./dummies/default_user_dummy";
 
 jest.mock("@modules/accounts/repositories/in-memory/UsersTestRepository");
 
@@ -21,44 +22,20 @@ describe("create user unit tests", () => {
   });
 
   it("should be able to create a new user", async () => {
-    const dummy_user: User = new User();
-
-    Object.assign(dummy_user, {
-      email: "test@mygameslist.com.br",
-      password: "test123",
-      username: "test-user",
-      avatar: "test-avatar",
-      created_at: new Date(),
-      updated_at: new Date(),
-    });
-
     (<jest.Mock>(
       usersTestRepository.validateUserToBeCreatedData
     )).mockReturnValue(VALID_USER_DATA_MESSAGE);
 
-    (<jest.Mock>usersTestRepository.create).mockReturnValue({
-      id: dummy_user.id,
-      email: dummy_user.email,
-      password: dummy_user.password,
-      username: dummy_user.username,
-      avatar: dummy_user.avatar,
-      gamesList: {
-        id: dummy_user.gamesList.id,
-        list: [],
-      },
-      admin: dummy_user.admin,
-      created_at: dummy_user.created_at,
-      updated_at: dummy_user.updated_at,
-    });
+    (<jest.Mock>usersTestRepository.create).mockReturnValue(user);
 
     const result = await createUserUseCase.execute({
-      email: dummy_user.email,
-      password: dummy_user.password,
-      username: dummy_user.username,
-      avatar: dummy_user.avatar,
+      email: user.email,
+      password: user.password,
+      username: user.username,
+      avatar: user.avatar,
     });
 
-    expect(result).toEqual(dummy_user);
+    expect(result).toEqual(user);
   });
 
   it("should not be able to create a user with same email", async () => {

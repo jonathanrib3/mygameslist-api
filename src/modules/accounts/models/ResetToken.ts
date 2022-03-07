@@ -1,4 +1,4 @@
-class Token {
+class ResetToken {
   id: string;
 
   user_id: string;
@@ -8,4 +8,4 @@ class Token {
   expires_in: number;
 }
 
-export { Token };
+export { ResetToken };

@@ -1,42 +1,41 @@
-import { User } from "@modules/accounts/models/User";
 import { TokensTestRepository } from "@modules/accounts/repositories/in-memory/TokensTestRepository";
 import { UsersTestRepository } from "@modules/accounts/repositories/in-memory/UsersTestRepository";
 import { CreateResetPasswordTokenUseCase } from "@modules/accounts/useCases/create_reset_password_token/CreateResetPasswordTokenUseCase";
-import { CreateUserUseCase } from "@modules/accounts/useCases/create_user/CreateUserUseCase";
 import { USER_NOT_FOUND_ERROR } from "@shared/constants/error_messages";
-import { UUID_V4_REGEX } from "@shared/constants/regexes";
 
-let tokensTestRepository: TokensTestRepository;
-let usersTestRepository: UsersTestRepository;
-let createUserUseCase: CreateUserUseCase;
-let createResetPasswordTokenUseCase: CreateResetPasswordTokenUseCase;
-let user: User;
+import { reset_token } from "./dummies/default_token_dummy";
+import { user } from "./dummies/default_user_dummy";
+
+jest.mock("@modules/accounts/repositories/in-memory/TokensTestRepository");
+jest.mock("@modules/accounts/repositories/in-memory/UsersTestRepository");
 
 describe("password reset unit tests", () => {
-  beforeAll(async () => {
+  let tokensTestRepository: TokensTestRepository;
+  let usersTestRepository: UsersTestRepository;
+  let createResetPasswordTokenUseCase: CreateResetPasswordTokenUseCase;
+
+  beforeEach(async () => {
     tokensTestRepository = new TokensTestRepository();
     usersTestRepository = new UsersTestRepository();
-    createUserUseCase = new CreateUserUseCase(usersTestRepository);
     createResetPasswordTokenUseCase = new CreateResetPasswordTokenUseCase(
       tokensTestRepository,
       usersTestRepository
     );
-
-    user = await createUserUseCase.execute({
-      email: "test@mygameslist.com",
-      username: "testuser",
-      password: "testpasswd",
-    });
   });
 
   it("should be able to generate a new token if it doesn't exists", async () => {
-    const data = await createResetPasswordTokenUseCase.execute(user.email);
+    (<jest.Mock>usersTestRepository.findByEmail).mockReturnValue(user);
 
-    expect(data.token_id.length).toBe(64);
-    expect(data.user_id).toMatch(UUID_V4_REGEX);
+    (<jest.Mock>tokensTestRepository.create).mockReturnValue(reset_token);
+
+    const result = await createResetPasswordTokenUseCase.execute(user.email);
+
+    expect(result).toEqual(reset_token);
   });
 
   it("should not be able to generate a new token with invalid user email", async () => {
+    (<jest.Mock>usersTestRepository.findByEmail).mockReturnValue(undefined);
+
     await expect(async () => {
       await createResetPasswordTokenUseCase.execute(
         "anyinvalidemail@email.com"
