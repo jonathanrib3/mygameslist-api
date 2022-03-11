@@ -5,7 +5,7 @@ import { UsersTestRepository } from "@modules/accounts/repositories/in-memory/Us
 import { UploadAvatarUseCase } from "@modules/accounts/useCases/upload_avatar/UploadAvatarUseCase";
 import { UPDATE_INVALID_USER_ERROR } from "@shared/constants/error_messages";
 
-import { user } from "./dummies/default_user_dummy";
+import { user } from "../../dummies/default_user_dummy";
 
 jest.mock("@modules/accounts/repositories/in-memory/UsersTestRepository");
 

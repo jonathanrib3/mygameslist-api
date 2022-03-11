@@ -10,8 +10,8 @@ import {
   USER_NOT_FOUND_ERROR,
 } from "@shared/constants/error_messages";
 
-import { session } from "./dummies/default_session_dummy";
-import { user } from "./dummies/default_user_dummy";
+import { session } from "../../dummies/default_session_dummy";
+import { user } from "../../dummies/default_user_dummy";
 
 jest.mock("@modules/accounts/repositories/in-memory/UsersTestRepository");
 jest.mock(

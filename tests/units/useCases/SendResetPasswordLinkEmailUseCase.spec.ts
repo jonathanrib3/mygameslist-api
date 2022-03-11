@@ -7,7 +7,7 @@ import { EMAIL_SUCCESSFULLY_SENT } from "@shared/constants/successful_messages";
 import { NodeMailerMailProvider } from "@shared/containers/providers/implementations/NodeMailerMailProvider";
 
 import { SendResetPasswordLinkEmailUseCase } from "./__mocks__/SendResetPasswordLinkEmailUseCase";
-import { user } from "./dummies/default_user_dummy";
+import { user } from "../../dummies/default_user_dummy";
 
 jest.mock("@modules/accounts/repositories/in-memory/UsersTestRepository");
 jest.mock(

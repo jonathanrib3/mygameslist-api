@@ -1,11 +1,9 @@
 import "express-async-errors";
 
+import express, { json } from "express";
+
 import { errorHandler } from "@infra/errors/errorHandler";
 import { router } from "@infra/http/routes";
-import "@shared/containers";
-import "@shared/containers/providers";
-
-import express, { json } from "express";
 
 const testApp = express();
 

@@ -1,4 +1,4 @@
-import "../../../../config.js";
+import "../../config.js";
 
 import { ResetSession } from "@modules/accounts/models/ResetSession";
 

@@ -3,8 +3,8 @@ import { UsersTestRepository } from "@modules/accounts/repositories/in-memory/Us
 import { CreateResetPasswordTokenUseCase } from "@modules/accounts/useCases/create_reset_password_token/CreateResetPasswordTokenUseCase";
 import { USER_NOT_FOUND_ERROR } from "@shared/constants/error_messages";
 
-import { reset_token } from "./dummies/default_token_dummy";
-import { user } from "./dummies/default_user_dummy";
+import { reset_token } from "../../dummies/default_reset_token_dummy";
+import { user } from "../../dummies/default_user_dummy";
 
 jest.mock("@modules/accounts/repositories/in-memory/TokensTestRepository");
 jest.mock("@modules/accounts/repositories/in-memory/UsersTestRepository");

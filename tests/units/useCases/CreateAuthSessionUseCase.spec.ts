@@ -6,7 +6,7 @@ import { CreateAuthSessionUseCase } from "@modules/accounts/useCases/create_auth
 import { INVALID_LOGIN_ERROR } from "@shared/constants/error_messages";
 import { JwtProvider } from "@shared/containers/providers/implementations/JwtProvider";
 
-import { user } from "./dummies/default_user_dummy";
+import { user } from "../../dummies/default_user_dummy";
 
 jest.mock("@modules/accounts/repositories/in-memory/UsersTestRepository");
 jest.mock("@shared/containers/providers/implementations/JwtProvider");
