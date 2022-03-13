@@ -1,9 +1,8 @@
-import { CreateSessionController } from "@modules/accounts/controllers/CreateSessionController";
+import { createAuthSessionHandler } from "@modules/accounts/controllers/createAuthSessionHandler";
 import { Router } from "express";
 
 const sessionRoutes = Router();
-const createSessionController = new CreateSessionController();
 
-sessionRoutes.post("/", createSessionController.handle);
+sessionRoutes.post("/", createAuthSessionHandler);
 
 export { sessionRoutes };

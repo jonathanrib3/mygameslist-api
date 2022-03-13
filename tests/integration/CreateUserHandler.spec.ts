@@ -10,13 +10,13 @@ import {
 
 import { user } from "../dummies/default_user_dummy";
 import { testApp } from "./infra/http/test_server";
-/*
-  TODO: refatorar os controllers e transformar em funções
-*/
+
 jest.mock("@modules/accounts/controllers/createUserHandler");
 
-describe("Create User Routes", () => {
-  it("POST /users/ - should be able to create a user with valid username and email", async () => {
+describe("create user routes", () => {
+  it("POST /users/ - should be able to return 201 CREATED on creating a valid user", async () => {
+    // Arrange
+
     (<jest.Mock>createUserHandler).mockImplementation(
       async (_request: Request, response: Response) =>
         response.status(201).send({
@@ -26,11 +26,15 @@ describe("Create User Routes", () => {
         })
     );
 
+    // Act
+
     const response = await request(testApp).post("/users").send({
       email: user.email,
       password: user.password,
       username: user.username,
     });
+
+    // Assert
 
     expect(response.status).toBe(201);
     expect(response.body).toEqual({
@@ -40,7 +44,7 @@ describe("Create User Routes", () => {
     });
   });
 
-  it("POST /users/ - should not be able to create a user with same email", async () => {
+  it("POST /users/ - should be able to return 400 BAD REQUEST on trying to create an user with an already existent email", async () => {
     (<jest.Mock>createUserHandler).mockImplementation(
       async (_request: Request, response: Response) =>
         response.status(400).send({ message: EMAIL_ALREADY_EXISTS_ERROR })
@@ -56,7 +60,7 @@ describe("Create User Routes", () => {
     expect(response.body).toEqual({ message: EMAIL_ALREADY_EXISTS_ERROR });
   });
 
-  it("POST /users/ - should not be able to create a new user with same username", async () => {
+  it("POST /users/ - should be able to return 400 BAD REQUEST on trying to create a user with an already existent username", async () => {
     (<jest.Mock>createUserHandler).mockImplementation(
       async (_request: Request, response: Response) =>
         response.status(400).send({ message: USERNAME_ALREADY_EXISTS_ERROR })
@@ -72,7 +76,7 @@ describe("Create User Routes", () => {
     expect(response.body).toEqual({ message: USERNAME_ALREADY_EXISTS_ERROR });
   });
 
-  it("POST /users/ - should not be able to create a user with username shorter than 4 characters", async () => {
+  it("POST /users/ - should be able to return 400 BAD REQUEST on trying to create an user with username shorter than 4 characters", async () => {
     (<jest.Mock>createUserHandler).mockImplementation(
       async (_request: Request, response: Response) =>
         response.status(400).send({ message: USERNAME_LENGTH_ERROR })
@@ -88,7 +92,7 @@ describe("Create User Routes", () => {
     expect(response.body).toEqual({ message: USERNAME_LENGTH_ERROR });
   });
 
-  it("POST /users/ - should not be able to create a user with username longer than 35 characters", async () => {
+  it("POST /users/ - should be able to return 400 BAD REQUEST on trying to create an user with username longer than 35 characters", async () => {
     (<jest.Mock>createUserHandler).mockImplementation(
       async (_request: Request, response: Response) =>
         response.status(400).send({ message: USERNAME_LENGTH_ERROR })

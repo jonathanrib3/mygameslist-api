@@ -24,22 +24,33 @@ describe("password reset unit tests", () => {
   });
 
   it("should be able to generate a new token if it doesn't exists", async () => {
+    // Arrange
+
     (<jest.Mock>usersTestRepository.findByEmail).mockReturnValue(user);
 
     (<jest.Mock>tokensTestRepository.create).mockReturnValue(reset_token);
 
+    // Act
+
     const result = await createResetPasswordTokenUseCase.execute(user.email);
+
+    // Assert
 
     expect(result).toEqual(reset_token);
   });
 
   it("should not be able to generate a new token with invalid user email", async () => {
+    // Arrange
+
     (<jest.Mock>usersTestRepository.findByEmail).mockReturnValue(undefined);
 
     await expect(async () => {
+      // Act
+
       await createResetPasswordTokenUseCase.execute(
         "anyinvalidemail@email.com"
       );
+      // Assert
     }).rejects.toThrow(USER_NOT_FOUND_ERROR);
   });
 });

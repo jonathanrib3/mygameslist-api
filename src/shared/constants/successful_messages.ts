@@ -3,6 +3,7 @@ const successful_messages = {
   EMAIL_SUCCESSFULLY_SENT: "Email sent successfully!",
   SESSION_CREATED_SUCCESSFULLY: "Session created successfully!",
   VALID_USER_DATA_MESSAGE: "Everything looks fine",
+  USER_UPDATED_SUCCESSFULLY: "User updated successfully!",
 };
 
 export const {
@@ -10,4 +11,5 @@ export const {
   EMAIL_SUCCESSFULLY_SENT,
   SESSION_CREATED_SUCCESSFULLY,
   VALID_USER_DATA_MESSAGE,
+  USER_UPDATED_SUCCESSFULLY,
 } = successful_messages;

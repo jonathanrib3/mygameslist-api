@@ -27,44 +27,58 @@ describe("create session unit test", () => {
   });
 
   it("should be able to generate a new token with valid user infos", async () => {
+    // Arrange
+
     (<jest.Mock>usersTestRepository.findByEmail).mockReturnValue(user);
 
     (<jest.Mock>bcrypt.compare).mockReturnValue(true);
 
-    const token =
-      "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNjk2NWU2NjYtOGQyZS00NGY2LWI0ZDUtNjczZTUxOGQ2NzdkIn0.jKeUb-BZPYO6fBSYtNWT52G3zSBOc5sAHvJ_yE8KqVg";
+    const token = "some valid token";
 
     (<jest.Mock>jwtProvider.sign).mockReturnValue(token);
+
+    // Act
 
     const result = await createSessionUseCase.execute({
       email: user.email,
       password: user.password,
     });
 
+    // Assert
+
     expect(result).toEqual(token);
   });
 
   it("should not be able to generate a new token with invalid email", async () => {
+    // Arrange
+
     (<jest.Mock>usersTestRepository.findByEmail).mockImplementation(() => {
       throw new AppError(400, INVALID_LOGIN_ERROR);
     });
 
     await expect(async () => {
+      // Act
+
       await createSessionUseCase.execute({
         email: "anynonexistentemail@email.com",
         password: "testpsswd",
       });
+      // Assert
     }).rejects.toThrow(INVALID_LOGIN_ERROR);
   });
 
   it("should not be able to generate a new token with invalid password", async () => {
+    // Arrange
     (<jest.Mock>bcrypt.compare).mockReturnValue(false);
 
     await expect(async () => {
+      // Act
+
       await createSessionUseCase.execute({
         email: "test@mygameslist.com.br",
         password: "anywrongpasswd",
       });
+      // Assert
     }).rejects.toThrow(INVALID_LOGIN_ERROR);
   });
 });

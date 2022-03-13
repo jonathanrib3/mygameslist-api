@@ -24,6 +24,8 @@ describe("Update User Use Case", () => {
   });
 
   it("should be able to update user's username", async () => {
+    // Arrange
+
     const newusername = "newusername!132";
 
     (<jest.Mock>usersTestRepository.update).mockReturnValue({
@@ -41,15 +43,21 @@ describe("Update User Use Case", () => {
       updated_at: new Date(),
     });
 
+    // Act
+
     const updated_user = await updateUserUseCase.execute({
       id: user.id,
       username: newusername,
     });
 
+    // Assert
+
     expect(user).not.toEqual(updated_user);
   });
 
   it("should be able to update user's password", async () => {
+    // Arrange
+
     const newpassword = "newpsswd!321";
 
     (<jest.Mock>bcrypt.hashSync).mockReturnValue(newpassword);
@@ -69,15 +77,21 @@ describe("Update User Use Case", () => {
       updated_at: new Date(),
     });
 
+    // Act
+
     const updated_user = await updateUserUseCase.execute({
       id: user.id,
       password: newpassword,
     });
 
+    // Assert
+
     expect(user).not.toEqual(updated_user);
   });
 
   it("should be able to update both user's password and username", async () => {
+    // Arrange
+
     const newusername = "newusername!132";
     const newpassword = "newpsswd!321";
 
@@ -98,34 +112,52 @@ describe("Update User Use Case", () => {
       updated_at: new Date(),
     });
 
+    // Act
+
     const updated_user = await updateUserUseCase.execute({
       id: user.id,
       password: newpassword,
       username: newusername,
     });
 
+    // Assert
+
     expect(user).not.toEqual(updated_user);
   });
 
   it("should not be able to update user's username to another one that's already in use", async () => {
+    // Arrange
+
     (<jest.Mock>usersTestRepository.update).mockImplementation(() => {
       throw new AppError(400, USERNAME_ALREADY_EXISTS_ERROR);
     });
 
     await expect(async () => {
+      // Act
+
       await updateUserUseCase.execute({
         id: v4(),
         username: "anyusernameinuse",
       });
+      // Assert
     }).rejects.toThrow(USERNAME_ALREADY_EXISTS_ERROR);
   });
 
   it("should not be able to update user's username to another one that's shorter than 4 characters", async () => {
+    // Arrange
+
+    (<jest.Mock>usersTestRepository.update).mockImplementation(() => {
+      throw new AppError(400, USERNAME_LENGTH_ERROR);
+    });
+
     await expect(async () => {
+      // Act
+
       await updateUserUseCase.execute({
         id: v4(),
         username: "any",
       });
+      // Assert
     }).rejects.toThrow(USERNAME_LENGTH_ERROR);
   });
 });

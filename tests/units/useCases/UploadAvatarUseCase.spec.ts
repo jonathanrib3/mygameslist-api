@@ -19,6 +19,8 @@ describe("Upload Avatar Use Case", () => {
   });
 
   it("should be able to store the image filename", async () => {
+    // Arrange
+
     const filename = "random_avatar.png";
 
     (<jest.Mock>usersTestRepository.updateAvatar).mockReturnValue({
@@ -36,26 +38,35 @@ describe("Upload Avatar Use Case", () => {
       updated_at: new Date(),
     });
 
+    // Act
+
     const result = await uploadAvatarUseCase.execute({
       user_id: user.id,
       filename,
     });
 
+    // Assert
+
     expect(result.avatar).toBe(filename);
   });
 
   it("should not be able to upload an avatar to an non existent user", async () => {
+    // Arrange
+
     const fake_id = v4();
 
     (<jest.Mock>usersTestRepository.updateAvatar).mockImplementation(() => {
       throw new AppError(400, UPDATE_INVALID_USER_ERROR);
     });
 
+    // Act
+
     await expect(async () => {
       await uploadAvatarUseCase.execute({
         user_id: fake_id,
         filename: "random_avatar.png",
       });
+      // Assert
     }).rejects.toThrow(UPDATE_INVALID_USER_ERROR);
   });
 });
