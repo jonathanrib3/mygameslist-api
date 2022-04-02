@@ -1,6 +1,7 @@
 import "../../../../../config.js";
 
 import { createClient } from "redis";
+
 import { logger } from "@infra/http/logger";
 
 interface IConnectionOptions {

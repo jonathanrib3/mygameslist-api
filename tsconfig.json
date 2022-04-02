@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es2017",
     "lib": [],
+    "composite": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "module": "commonjs",
@@ -9,6 +10,7 @@
       "./node_modules/@types",
       "./@types"
     ],
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "outDir": "./dist",
     "removeComments": true,
@@ -30,7 +32,7 @@
         "./src/shared/*"
       ],
       "@root/*": [
-        "./"
+        "./*"
       ]
     }
   },

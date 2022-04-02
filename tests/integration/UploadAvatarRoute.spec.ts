@@ -2,13 +2,14 @@ import crypto from "crypto";
 import { NextFunction, Request, Response } from "express";
 import request from "supertest";
 
-import { uploadAvatarHandler } from "@modules/accounts/controllers/uploadAvatarHandler";
+import { app } from "@infra/http/server";
+import { User } from "@modules/accounts/models/User";
+import { UploadAvatarUseCase } from "@modules/accounts/useCases/upload_avatar/UploadAvatarUseCase";
 import { INVALID_TOKEN_ERROR } from "@shared/constants/error_messages";
 import { authentication } from "@shared/infra/http/middlewares/authentication";
 
 import { avatar } from "../dummies/default_avatar_file_dummy";
 import { user } from "../dummies/default_user_dummy";
-import { testApp } from "./infra/http/test_server";
 
 const request_filename = `${crypto.randomBytes(8).toString("hex")} - ${
   avatar.filename
@@ -48,13 +49,9 @@ jest.mock("multer", () => {
   return multer;
 });
 
-jest.mock("@modules/accounts/controllers/uploadAvatarHandler");
-
 describe("upload avatar routes", () => {
   it("PATCH /users/avatar/ - should be able to return 200 OK on trying to upload an avatar with an authenticated user", async () => {
     // Arrange
-
-    const token = user.id;
 
     (<jest.Mock>authentication).mockImplementation(
       (req: Request, res: Response, next: NextFunction) => {
@@ -68,18 +65,23 @@ describe("upload avatar routes", () => {
       }
     );
 
-    (<jest.Mock>uploadAvatarHandler).mockImplementation(
-      (req: Request, res: Response) =>
-        res
-          .status(200)
-          .send({ user_id: token, file_uploaded: req.file.filename })
-    );
+    jest
+      .spyOn(UploadAvatarUseCase.prototype, "execute")
+      .mockImplementation(async ({ user_id, filename }) => {
+        const updated = new User();
+
+        Object.assign(updated, user);
+
+        updated.avatar = filename;
+
+        return updated;
+      });
 
     // Act
 
-    const response = await request(testApp)
+    const response = await request(app)
       .patch("/users/avatar")
-      .set("authorization", `Bearer ${token}`)
+      .set("authorization", `Bearer ${user.id}`)
       .set("Content-Type", "multipart/form-data")
       .attach("avatar", avatar.buffer);
 
@@ -87,7 +89,7 @@ describe("upload avatar routes", () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
-      user_id: token,
+      user_id: user.id,
       file_uploaded: request_filename,
     });
   });
@@ -102,7 +104,7 @@ describe("upload avatar routes", () => {
 
     // Act
 
-    const response = await request(testApp)
+    const response = await request(app)
       .patch("/users/avatar")
       .set("Content-Type", "multipart/form-data")
       .attach("avatar", avatar.buffer);

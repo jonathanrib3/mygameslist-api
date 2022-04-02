@@ -13,7 +13,7 @@ async function authentication(
   request: Request,
   _response: Response,
   next: NextFunction
-) {
+): Promise<void> {
   const jwtProvider = new JwtProvider();
   const usersTestRepository = container.resolve<IUsersRepository>(
     "UsersTestRepository"

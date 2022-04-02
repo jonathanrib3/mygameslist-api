@@ -1,6 +1,6 @@
 version: '3.7'
 services:
-  local_token_database:
+  redis_database:
     image: redis
     container_name: redis_container
     environment:
@@ -11,7 +11,7 @@ services:
       redis-server --requirepass $REDIS_PASSWORD
     restart: always
 
-  local_database:
+  mongodb_database:
     image: mongo
     container_name: mongo_container
     restart: always

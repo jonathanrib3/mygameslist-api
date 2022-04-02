@@ -18,7 +18,7 @@ interface IRequest {
 @injectable()
 class CreateUserUseCase {
   constructor(
-    @inject("UsersTestRepository")
+    @inject("MongoUsersRepository")
     private usersRepository: IUsersRepository
   ) {}
 
@@ -47,7 +47,7 @@ class CreateUserUseCase {
     return user;
   }
 
-  isUsernameLengthValid(username: string) {
+  isUsernameLengthValid(username: string): boolean {
     return username.length < 4 || username.length > 35;
   }
 }

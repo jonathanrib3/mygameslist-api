@@ -6,10 +6,10 @@
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
     "start": "node dist/server.js",
     "dev": "NODE_ENV=development ts-node-dev -r tsconfig-paths/register --respawn --no-notify --transpile-only --ignore-watch node_modules ./src/main.ts",
-    "test": "NODE_ENV=test jest",
-    "test:unit": "NODE_ENV=test jest ./src/tests/unit",
-    "test:integration": "NODE_ENV=test jest ./src/tests/integration",
-    "test:coverage": "NODE_ENV=test jest --collect-coverage"
+    "test": "NODE_ENV=test LOG_DISABLED=true jest",
+    "test:unit": "NODE_ENV=test LOG_DISABLED=true jest ./tests/unit",
+    "test:integration": "NODE_ENV=test LOG_DISABLED=true jest ./tests/integration",
+    "test:coverage": "NODE_ENV=test LOG_DISABLED=true jest --collect-coverage"
   },
   "license": "MIT",
   "devDependencies": {

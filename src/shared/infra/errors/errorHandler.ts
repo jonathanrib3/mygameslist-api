@@ -11,7 +11,15 @@ function errorHandler(
   if (error instanceof AppError) {
     return response.status(error.status).send({ message: error.message });
   }
-  console.log(error);
+
+  if (error.name === "MongoServerError") {
+    return response.status(400).send({ message: error.message });
+  }
+
+  if (error.name === "MongoError") {
+    return response.status(400).send({ message: error.message });
+  }
+  console.log(error.name);
   return response.status(500).send({ message: "Server internal error" });
 }
 

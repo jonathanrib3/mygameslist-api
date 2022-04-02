@@ -1,6 +1,8 @@
 import pino from "pino";
+import "@root/config.js";
 
 const logger = pino({
+  enabled: !process.env.LOG_DISABLED,
   level: "debug",
   transport: {
     targets: [

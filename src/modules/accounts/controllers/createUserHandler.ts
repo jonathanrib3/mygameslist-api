@@ -20,6 +20,7 @@ async function createUserHandler(
   });
 
   const user_info: ICreateUserReturnDTO = {
+    id: user.id,
     username: user.username,
     gamesList: user.gamesList,
     created_at: user.created_at,
