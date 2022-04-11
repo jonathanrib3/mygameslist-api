@@ -1,5 +1,5 @@
 import { AppError } from "@infra/errors/AppError";
-import { UsersTestRepository } from "@modules/accounts/repositories/in-memory/UsersTestRepository";
+import { UsersTestRepository } from "@modules/accounts/repositories/implementations/in-memory/UsersTestRepository";
 import { CreateUserUseCase } from "@modules/accounts/useCases/create_user/CreateUserUseCase";
 import {
   EMAIL_ALREADY_EXISTS_ERROR,

@@ -1,4 +1,4 @@
-import { UsersTestRepository } from "@modules/accounts/repositories/in-memory/UsersTestRepository";
+import { UsersTestRepository } from "@modules/accounts/repositories/implementations/in-memory/UsersTestRepository";
 import { user } from "@root/tests/dummies/default_user_dummy";
 
 let usersTestRepository: UsersTestRepository;

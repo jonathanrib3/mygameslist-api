@@ -19,7 +19,7 @@ function errorHandler(
   if (error.name === "MongoError") {
     return response.status(400).send({ message: error.message });
   }
-  console.log(error.name);
+  console.log(error);
   return response.status(500).send({ message: "Server internal error" });
 }
 

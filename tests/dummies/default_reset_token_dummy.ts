@@ -9,6 +9,7 @@ const reset_token = new ResetToken();
 Object.assign(reset_token, {
   id: v4(),
   user_id: user.id,
+  token_secret: "564029",
   created_at: new Date(),
   expires_in: new Date().getTime() + 300000,
 });

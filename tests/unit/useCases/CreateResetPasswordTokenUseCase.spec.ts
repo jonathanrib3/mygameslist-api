@@ -1,5 +1,5 @@
-import { TokensTestRepository } from "@modules/accounts/repositories/in-memory/TokensTestRepository";
-import { UsersTestRepository } from "@modules/accounts/repositories/in-memory/UsersTestRepository";
+import { TokensTestRepository } from "@modules/accounts/repositories/implementations/in-memory/TokensTestRepository";
+import { UsersTestRepository } from "@modules/accounts/repositories/implementations/in-memory/UsersTestRepository";
 import { CreateResetPasswordTokenUseCase } from "@modules/accounts/useCases/create_reset_password_token/CreateResetPasswordTokenUseCase";
 import { USER_NOT_FOUND_ERROR } from "@shared/constants/error_messages";
 

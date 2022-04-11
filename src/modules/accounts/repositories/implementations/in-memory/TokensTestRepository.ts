@@ -1,10 +1,10 @@
-import "../../../../../config.js";
+import "../../../../../../config.js";
 
 import bcrypt from "bcrypt";
 
 import { ResetToken } from "@modules/accounts/models/ResetToken";
 
-import { ITokensRepository } from "../ITokensRepository";
+import { ITokensRepository } from "../../ITokensRepository";
 
 class TokensTestRepository implements ITokensRepository {
   private repository: ResetToken[];

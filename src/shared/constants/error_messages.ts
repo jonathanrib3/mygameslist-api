@@ -15,6 +15,7 @@ const stringConstants = {
   EXISTENT_NON_EXPIRED_SESSION_ERROR: "Non expired session already exists.",
   INTERNAL_SERVER_ERROR:
     "Something went wrong in the server. Please, try again later",
+  SESSION_NOT_FOUND_ERROR: "Session does not exists.",
 };
 
 export const {
@@ -30,4 +31,5 @@ export const {
   EMAIL_NOT_SENT_ERROR,
   EXISTENT_NON_EXPIRED_SESSION_ERROR,
   INTERNAL_SERVER_ERROR,
+  SESSION_NOT_FOUND_ERROR,
 } = stringConstants;

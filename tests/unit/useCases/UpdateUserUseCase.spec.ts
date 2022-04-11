@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import { v4 } from "uuid";
 
 import { AppError } from "@infra/errors/AppError";
-import { UsersTestRepository } from "@modules/accounts/repositories/in-memory/UsersTestRepository";
+import { UsersTestRepository } from "@modules/accounts/repositories/implementations/in-memory/UsersTestRepository";
 import { UpdateUserUseCase } from "@modules/accounts/useCases/update_user/UpdateUserUseCase";
 import {
   USERNAME_ALREADY_EXISTS_ERROR,

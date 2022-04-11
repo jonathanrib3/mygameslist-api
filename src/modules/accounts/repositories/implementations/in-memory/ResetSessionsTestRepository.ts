@@ -2,7 +2,7 @@ import { AppError } from "@infra/errors/AppError";
 import { ResetSession } from "@modules/accounts/models/ResetSession";
 import { EXISTENT_NON_EXPIRED_SESSION_ERROR } from "@shared/constants/error_messages";
 
-import { ISessionsRepository } from "../ISessionsRepository";
+import { ISessionsRepository } from "../../ISessionsRepository";
 
 class ResetSessionsTestRepository implements ISessionsRepository {
   private repository: ResetSession[];

@@ -1,7 +1,7 @@
 import { v4 } from "uuid";
 
 import { AppError } from "@infra/errors/AppError";
-import { UsersTestRepository } from "@modules/accounts/repositories/in-memory/UsersTestRepository";
+import { UsersTestRepository } from "@modules/accounts/repositories/implementations/in-memory/UsersTestRepository";
 import { UploadAvatarUseCase } from "@modules/accounts/useCases/upload_avatar/UploadAvatarUseCase";
 import { UPDATE_INVALID_USER_ERROR } from "@shared/constants/error_messages";
 

@@ -1,8 +1,10 @@
 import { container } from "tsyringe";
 
-import { UsersTestRepository } from "@modules/accounts/repositories/in-memory/UsersTestRepository";
+import { UsersTestRepository } from "@modules/accounts/repositories/implementations/in-memory/UsersTestRepository";
+import { MongoResetSessionsRepository } from "@modules/accounts/repositories/implementations/mongodb/MongoResetSessionsRepository";
+import { MongoUsersRepository } from "@modules/accounts/repositories/implementations/mongodb/MongoUsersRepository";
+import { ISessionsRepository } from "@modules/accounts/repositories/ISessionsRepository";
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
-import { MongoUsersRepository } from "@modules/accounts/repositories/mongodb/MongoUsersRepository";
 
 container.registerSingleton<IUsersRepository>(
   "UsersTestRepository",
@@ -12,4 +14,9 @@ container.registerSingleton<IUsersRepository>(
 container.registerSingleton<IUsersRepository>(
   "MongoUsersRepository",
   MongoUsersRepository
+);
+
+container.registerSingleton<ISessionsRepository>(
+  "MongoResetSessionsRepository",
+  MongoResetSessionsRepository
 );

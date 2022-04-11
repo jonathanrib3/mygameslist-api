@@ -1,14 +1,17 @@
 import "../../../../../config.js";
-import bcrypt from "bcrypt";
+
 import fs from "fs";
 import { compile } from "handlebars";
 import path from "path";
 import { inject, injectable } from "tsyringe";
 
 import { AppError } from "@infra/errors/AppError";
+import { IHtmlEmailContent } from "@modules/accounts/interfaces/IHtmlEmailContent";
+import { ISessionsRepository } from "@modules/accounts/repositories/ISessionsRepository";
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
 import {
   EMAIL_NOT_SENT_ERROR,
+  SESSION_NOT_FOUND_ERROR,
   USER_NOT_FOUND_ERROR,
 } from "@shared/constants/error_messages";
 import { EMAIL_OK_STATUS_RESPONSE_REGEX } from "@shared/constants/regexes";
@@ -16,36 +19,45 @@ import { EMAIL_SUCCESSFULLY_SENT } from "@shared/constants/successful_messages";
 import { IMailProvider } from "@shared/containers/providers/IMailProvider";
 
 interface IRequest {
-  token_id: string;
-  user_id: string;
+  token_secret: string;
+  email: string;
 }
 
 @injectable()
 class SendResetPasswordLinkEmailUseCase {
   constructor(
-    @inject("UsersTestRepository")
+    @inject("MongoUsersRepository")
     private usersRepository: IUsersRepository,
+    @inject("MongoResetSessionsRepository")
+    private sessionsRepository: ISessionsRepository,
     @inject("NodeMailerMailProvider")
     private mailProvider: IMailProvider
   ) {}
 
-  async execute({ token_id, user_id }: IRequest): Promise<string> {
-    const user = await this.usersRepository.findById(user_id);
+  async execute({ token_secret, email }: IRequest): Promise<string> {
+    const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
       throw new AppError(401, USER_NOT_FOUND_ERROR);
     }
 
-    const link = `${process.env.BASE_URL}/resetPassword?token=${bcrypt.hashSync(
-      token_id,
-      Number(process.env.BCRYPT_SALT)
-    )}`;
+    const session = await this.sessionsRepository.findByUserId(user.id);
 
-    const email_content = this.generateHtmlEmail(user.username, link);
+    if (!session) {
+      throw new AppError(400, SESSION_NOT_FOUND_ERROR);
+    }
+
+    const link = `${process.env.BASE_URL}/resetPassword?session=${session.id}`;
+
+    const email_content = this.generateHtmlEmail({
+      username: user.username,
+      link,
+      token_secret,
+    });
 
     const email_sent_response_data = await this.mailProvider.sendEmail<string>(
       email_content,
-      user.email,
+      email,
       "Reset Password Service"
     );
 
@@ -62,7 +74,11 @@ class SendResetPasswordLinkEmailUseCase {
     return EMAIL_SUCCESSFULLY_SENT;
   }
 
-  private generateHtmlEmail(username: string, link: string) {
+  private generateHtmlEmail({
+    username,
+    link,
+    token_secret,
+  }: IHtmlEmailContent): string {
     const htmlTemplateSource = fs.readFileSync(
       path.resolve(
         __dirname,
@@ -77,7 +93,7 @@ class SendResetPasswordLinkEmailUseCase {
 
     const template = compile(htmlTemplateSource);
 
-    return template({ username, link });
+    return template({ username, link, token_secret });
   }
 }
 

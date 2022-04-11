@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 
 import { AppError } from "@infra/errors/AppError";
-import { UsersTestRepository } from "@modules/accounts/repositories/in-memory/UsersTestRepository";
+import { UsersTestRepository } from "@modules/accounts/repositories/implementations/in-memory/UsersTestRepository";
 import { CreateAuthSessionUseCase } from "@modules/accounts/useCases/create_auth_session/CreateAuthSessionUseCase";
 import { INVALID_LOGIN_ERROR } from "@shared/constants/error_messages";
 import { JwtProvider } from "@shared/containers/providers/implementations/JwtProvider";

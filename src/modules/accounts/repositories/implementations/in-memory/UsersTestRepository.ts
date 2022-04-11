@@ -10,7 +10,7 @@ import {
 } from "@shared/constants/error_messages";
 import { VALID_USER_DATA_MESSAGE } from "@shared/constants/successful_messages";
 
-import { IUsersRepository } from "../IUsersRepository";
+import { IUsersRepository } from "../../IUsersRepository";
 
 class UsersTestRepository implements IUsersRepository {
   private repository: User[];

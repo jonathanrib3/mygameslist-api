@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { inject, injectable } from "tsyringe";
 
 import { AppError } from "@infra/errors/AppError";
+import { User } from "@modules/accounts/models/User";
 import { ITokensRepository } from "@modules/accounts/repositories/ITokensRepository";
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
 import {
@@ -18,7 +19,7 @@ class ResetPasswordUseCase {
     private usersRepository: IUsersRepository
   ) {}
 
-  async execute(hashed_token_id: string, password: string) {
+  async execute(hashed_token_id: string, password: string): Promise<User> {
     const found_token = await this.tokensRepository.findByToken(
       hashed_token_id
     );

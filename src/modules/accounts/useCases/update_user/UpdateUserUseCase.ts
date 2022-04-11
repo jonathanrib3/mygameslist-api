@@ -17,7 +17,7 @@ interface IRequest {
 @injectable()
 class UpdateUserUseCase {
   constructor(
-    @inject("UsersTestRepository")
+    @inject("MongoUsersRepository")
     private usersRepository: IUsersRepository
   ) {}
 

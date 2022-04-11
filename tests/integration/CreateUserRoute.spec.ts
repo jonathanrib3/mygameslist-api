@@ -2,7 +2,7 @@ import request from "supertest";
 
 import { AppError } from "@infra/errors/AppError";
 import { app } from "@infra/http/server";
-import { UsersTestRepository } from "@modules/accounts/repositories/in-memory/UsersTestRepository";
+import { UsersTestRepository } from "@modules/accounts/repositories/implementations/in-memory/UsersTestRepository";
 import {
   EMAIL_ALREADY_EXISTS_ERROR,
   USERNAME_ALREADY_EXISTS_ERROR,
