@@ -41,4 +41,8 @@ export class MongoResetSessionsRepository implements ISessionsRepository {
   async findByUserId(user_id: string): Promise<ResetSession> {
     return this.repository.findOne({ user_id });
   }
+
+  async findById(session_id: string): Promise<ResetSession> {
+    return this.repository.findById(session_id);
+  }
 }

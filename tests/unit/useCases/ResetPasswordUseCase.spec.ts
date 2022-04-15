@@ -1,50 +1,103 @@
-// import { TokensTestRepository } from "@modules/accounts/repositories/in-memory/TokensTestRepository";
-// import { UsersTestRepository } from "@modules/accounts/repositories/in-memory/UsersTestRepository";
-// import { ResetPasswordUseCase } from "@modules/accounts/useCases/reset_password/ResetPasswordUseCase";
-// import { EXPIRED_TOKEN_ERROR } from "@shared/constants/error_messages";
+import bcrypt from "bcrypt";
 
-// jest.mock("@modules/accounts/repositories/in-memory/UsersTestRepository");
+import { User } from "@modules/accounts/models/User";
+import { ResetSessionsTestRepository } from "@modules/accounts/repositories/implementations/in-memory/ResetSessionsTestRepository";
+import { UsersTestRepository } from "@modules/accounts/repositories/implementations/in-memory/UsersTestRepository";
+import { ResetPasswordUseCase } from "@modules/accounts/useCases/reset_password/ResetPasswordUseCase";
+import { session } from "@root/tests/dummies/default_session_dummy";
+import { user } from "@root/tests/dummies/default_user_dummy";
+import {
+  INVALID_RESET_TOKEN_ERROR,
+  RESET_SESSION_NOT_FOUND_ERROR,
+} from "@shared/constants/error_messages";
 
-// describe("reset password unit tests", () => {
-//   let usersTestRepository: UsersTestRepository;
-//   let tokensTestRepository: TokensTestRepository;
-//   let resetPasswordUseCase: ResetPasswordUseCase;
+describe("reset password unit tests", () => {
+  let usersTestRepository: UsersTestRepository;
+  let resetSessionsTestRepository: ResetSessionsTestRepository;
+  let resetPasswordUseCase: ResetPasswordUseCase;
+  const new_password = "newpasswd321";
 
-//   beforeAll(async () => {
-//     usersTestRepository = new UsersTestRepository();
-//     tokensTestRepository = new TokensTestRepository();
-//     resetPasswordUseCase = new ResetPasswordUseCase(
-//       tokensTestRepository,
-//       usersTestRepository
-//     );
-//   });
+  beforeAll(async () => {
+    usersTestRepository = new UsersTestRepository();
+    resetSessionsTestRepository = new ResetSessionsTestRepository();
+    resetPasswordUseCase = new ResetPasswordUseCase(
+      resetSessionsTestRepository,
+      usersTestRepository
+    );
+  });
 
-//   it("should be able to reset a password with a valid token", async () => {
-//     const created_token = await createResetPasswordTokenUseCase.execute(
-//       user.email
-//     );
+  it("should be able to reset a password with a valid token", async () => {
+    // Arrange
 
-//     const old_password = user.password;
+    const { id, token } = session;
+    const user_to_be_updated = new User();
 
-//     const update = await resetPasswordUseCase.execute(
-//       created_token.token_id,
-//       "newpasswd321"
-//     );
+    Object.assign(user_to_be_updated, user);
 
-//     expect(update.password).not.toBe(old_password);
-//   });
+    jest
+      .spyOn(resetSessionsTestRepository, "findById")
+      .mockReturnValue(Promise.resolve(session));
 
-//   it("should not be able to reset a password with an already expired token", async () => {
-//     const created_token = await createResetPasswordTokenUseCase.execute(
-//       user.email
-//     );
+    jest.spyOn(bcrypt, "compareSync").mockReturnValue(true);
 
-//     const { token_id } = created_token;
+    jest.spyOn(usersTestRepository, "update").mockImplementation(async () => {
+      Object.assign(user_to_be_updated, {
+        password: new_password,
+      });
 
-//     await tokensTestRepository.setTokenToExpired(token_id);
+      return user_to_be_updated;
+    });
 
-//     expect(async () => {
-//       await resetPasswordUseCase.execute(token_id, "newpasswd123");
-//     }).rejects.toThrow(EXPIRED_TOKEN_ERROR);
-//   });
-// });
+    // Act
+
+    const old_password = user.password;
+
+    // Assert
+
+    const update = await resetPasswordUseCase.execute({
+      session_id: id,
+      token_secret: token.token_secret,
+      new_password,
+    });
+
+    expect(update.password).not.toBe(old_password);
+  });
+
+  it("should not be able to reset a password with an already expired token", async () => {
+    // Arrange
+
+    const { id, token } = session;
+
+    jest
+      .spyOn(resetSessionsTestRepository, "findById")
+      .mockReturnValue(Promise.resolve(undefined));
+
+    // Act and Assert
+
+    expect(async () => {
+      await resetPasswordUseCase.execute({
+        session_id: id,
+        token_secret: token.token_secret,
+        new_password,
+      });
+    }).rejects.toThrow(RESET_SESSION_NOT_FOUND_ERROR);
+  });
+
+  it("should not be able to reset a password with an invalid token secret", async () => {
+    const { id } = session;
+
+    jest
+      .spyOn(resetSessionsTestRepository, "findById")
+      .mockReturnValue(Promise.resolve(session));
+
+    jest.spyOn(bcrypt, "compareSync").mockReturnValue(false);
+
+    expect(async () => {
+      await resetPasswordUseCase.execute({
+        session_id: id,
+        token_secret: "wrongsecret",
+        new_password,
+      });
+    }).rejects.toThrow(INVALID_RESET_TOKEN_ERROR);
+  });
+});

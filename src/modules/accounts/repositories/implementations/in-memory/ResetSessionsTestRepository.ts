@@ -37,7 +37,15 @@ class ResetSessionsTestRepository implements ISessionsRepository {
   }
 
   async findByUserId(user_id: string): Promise<ResetSession> {
-    return this.repository.find((session) => session.user_id === user_id);
+    const session_found = this.repository.find(
+      (session) => session.user_id === user_id
+    );
+
+    if (this.isSessionExpired(session_found) || !session_found) {
+      return undefined;
+    }
+
+    return session_found;
   }
 
   isSessionExpired(session: ResetSession): boolean {
