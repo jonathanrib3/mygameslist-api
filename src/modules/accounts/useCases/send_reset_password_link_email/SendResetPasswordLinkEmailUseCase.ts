@@ -1,4 +1,4 @@
-import "../../../../../config.js";
+import "@root/config.js";
 
 import fs from "fs";
 import { compile } from "handlebars";
@@ -11,7 +11,7 @@ import { ISessionsRepository } from "@modules/accounts/repositories/ISessionsRep
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
 import {
   EMAIL_NOT_SENT_ERROR,
-  SESSION_NOT_FOUND_ERROR,
+  RESET_SESSION_NOT_FOUND_ERROR,
   USER_NOT_FOUND_ERROR,
 } from "@shared/constants/error_messages";
 import { EMAIL_OK_STATUS_RESPONSE_REGEX } from "@shared/constants/regexes";
@@ -44,7 +44,7 @@ class SendResetPasswordLinkEmailUseCase {
     const session = await this.sessionsRepository.findByUserId(user.id);
 
     if (!session) {
-      throw new AppError(400, SESSION_NOT_FOUND_ERROR);
+      throw new AppError(400, RESET_SESSION_NOT_FOUND_ERROR);
     }
 
     const link = `${process.env.BASE_URL}/resetPassword?session=${session.id}`;
@@ -55,13 +55,13 @@ class SendResetPasswordLinkEmailUseCase {
       token_secret,
     });
 
-    const email_sent_response_data = await this.mailProvider.sendEmail<string>(
+    const email_sent_response_data = await this.mailProvider.sendEmail(
       email_content,
       email,
       "Reset Password Service"
     );
 
-    const { accepted, rejected, response } = email_sent_response_data;
+    const { accepted, response } = email_sent_response_data;
 
     if (
       !response.match(EMAIL_OK_STATUS_RESPONSE_REGEX) ||

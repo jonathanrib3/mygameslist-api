@@ -1,7 +1,9 @@
+import { INodemailerEmailSentData } from "@shared/containers/providers/interfaces/INodemailerEmailSentData";
+import { ISESEmailSentData } from "@shared/containers/providers/interfaces/ISESEmailSentData";
+
 interface IEMailSentDTO {
-  accepted: string[];
-  rejected: string[];
-  response: string;
+  sesEmailSentData?: ISESEmailSentData;
+  nodemailerEmailSentData?: INodemailerEmailSentData;
 }
 
 export { IEMailSentDTO };

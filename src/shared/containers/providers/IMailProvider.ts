@@ -1,10 +1,11 @@
 import { IEMailSentDTO } from "./dtos/IEmailSentDTO";
 
 interface IMailProvider {
-  sendEmail<ContentType>(
-    message_data: ContentType,
+  sendEmail(
+    html_message_data: string,
     user_email: string,
-    subject: string
+    subject: string,
+    text_message_data?: string
   ): Promise<IEMailSentDTO>;
 }
 

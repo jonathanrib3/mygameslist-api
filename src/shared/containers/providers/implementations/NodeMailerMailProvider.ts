@@ -1,16 +1,10 @@
-import { Transporter } from "nodemailer";
-
 import { transporter } from "@infra/smtp/smtp_transporter";
+import { IEMailSentDTO } from "@shared/containers/providers/dtos/IEmailSentDTO";
 
-import { IEMailSentDTO } from "../dtos/IEmailSentDTO";
 import { IMailProvider } from "../IMailProvider";
 
 class NodeMailerMailProvider implements IMailProvider {
-  private mail_transporter: Transporter;
-
-  constructor() {
-    this.mail_transporter = transporter;
-  }
+  private mail_transporter = transporter;
 
   async sendEmail<ContentType>(
     message_data: ContentType,
@@ -25,11 +19,14 @@ class NodeMailerMailProvider implements IMailProvider {
       html: message_data,
     });
 
-    return {
-      accepted: email.accepted as string[],
-      rejected: email.rejected as string[],
-      response: email.response as string,
+    const emailSentData: IEMailSentDTO = {
+      nodemailerEmailSentData: {
+        accepted: email.accepted as string[],
+        response: email.response as string,
+      },
     };
+
+    return emailSentData;
   }
 }
 
