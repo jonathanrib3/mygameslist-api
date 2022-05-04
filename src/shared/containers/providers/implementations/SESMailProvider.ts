@@ -39,6 +39,7 @@ export class SESMailProvider implements IMailProvider {
         },
         (err, data) => {
           if (err) {
+            console.log(err);
             throw new AppError(400, EMAIL_NOT_SENT_ERROR);
           }
           return data;

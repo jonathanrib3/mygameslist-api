@@ -3,9 +3,10 @@ import "@root/config.js";
 import fs from "fs";
 import { compile } from "handlebars";
 import path from "path";
-import { inject, injectable } from "tsyringe";
+import { injectable } from "tsyringe";
 
 import { AppError } from "@infra/errors/AppError";
+import { getResetPasswordEmailTextContent } from "@infra/smtp/templates/text_templates/reset_password_text_template";
 import { IHtmlEmailContent } from "@modules/accounts/interfaces/IHtmlEmailContent";
 import { ISessionsRepository } from "@modules/accounts/repositories/ISessionsRepository";
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
@@ -26,11 +27,8 @@ interface IRequest {
 @injectable()
 class SendResetPasswordLinkEmailUseCase {
   constructor(
-    @inject("MongoUsersRepository")
     private usersRepository: IUsersRepository,
-    @inject("MongoResetSessionsRepository")
     private sessionsRepository: ISessionsRepository,
-    @inject("NodeMailerMailProvider")
     private mailProvider: IMailProvider
   ) {}
 
@@ -55,20 +53,37 @@ class SendResetPasswordLinkEmailUseCase {
       token_secret,
     });
 
+    const text_content = getResetPasswordEmailTextContent({
+      username: user.username,
+      link,
+      token_secret,
+    });
+
     const email_sent_response_data = await this.mailProvider.sendEmail(
       email_content,
       email,
-      "Reset Password Service"
+      "Reset Password Service",
+      text_content
     );
 
-    const { accepted, response } = email_sent_response_data;
+    const { nodemailerEmailSentData, sesEmailSentData } =
+      email_sent_response_data;
 
-    if (
-      !response.match(EMAIL_OK_STATUS_RESPONSE_REGEX) ||
-      accepted.length === 0 ||
-      rejected.length > 0
-    ) {
-      throw new AppError(400, EMAIL_NOT_SENT_ERROR);
+    if (nodemailerEmailSentData) {
+      const { accepted, response } = nodemailerEmailSentData;
+
+      if (
+        !response.match(EMAIL_OK_STATUS_RESPONSE_REGEX) ||
+        accepted.length === 0
+      ) {
+        throw new AppError(400, EMAIL_NOT_SENT_ERROR);
+      }
+    } else {
+      const { statusCode, statusMessage } = sesEmailSentData;
+
+      if (statusCode !== 200 && statusMessage !== "OK") {
+        throw new AppError(400, EMAIL_NOT_SENT_ERROR);
+      }
     }
 
     return EMAIL_SUCCESSFULLY_SENT;

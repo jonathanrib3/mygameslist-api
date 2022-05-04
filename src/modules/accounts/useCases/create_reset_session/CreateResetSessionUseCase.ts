@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import "@root/config.js";
-import { inject, injectable } from "tsyringe";
+import { injectable } from "tsyringe";
 
 import { AppError } from "@infra/errors/AppError";
 import { ResetSession } from "@modules/accounts/models/ResetSession";
@@ -16,11 +16,8 @@ const MAX = Number(process.env.MAX_TOKEN_SECRET);
 @injectable()
 class CreateResetSessionUseCase {
   constructor(
-    @inject("MongoUsersRepository")
     private usersRepository: IUsersRepository,
-    @inject("MongoResetSessionsRepository")
     private sessionsRepository: ISessionsRepository,
-    @inject("NodeMailerMailProvider")
     private mailProvider: IMailProvider
   ) {}
 

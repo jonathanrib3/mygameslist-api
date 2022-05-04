@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
-import { container } from "tsyringe";
 
-import { CreateResetSessionUseCase } from "@modules/accounts/useCases/create_reset_session/CreateResetSessionUseCase";
+import { getCreateResetSessionUseCase } from "@modules/accounts/factories/createResetSessionUseCaseFactory";
 import { RESET_SESSION_CREATED_SUCCESSFULLY } from "@shared/constants/successful_messages";
 
 export async function createResetSessionHandler(
@@ -10,9 +9,7 @@ export async function createResetSessionHandler(
 ): Promise<Response<any, Record<string, any>>> {
   const { email } = request.body;
 
-  const createResetSessionUseCase = container.resolve(
-    CreateResetSessionUseCase
-  );
+  const createResetSessionUseCase = getCreateResetSessionUseCase();
 
   await createResetSessionUseCase.execute(email);
 
