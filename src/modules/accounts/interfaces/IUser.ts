@@ -1,4 +1,4 @@
-import { IGamesList } from "@modules/accounts/interfaces/index";
+import { IGamesList } from "@modules/games/interfaces/IGamesList";
 
 export interface IUser {
   id: string;

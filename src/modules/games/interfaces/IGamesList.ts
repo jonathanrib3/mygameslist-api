@@ -1,4 +1,4 @@
-import { IGame } from "@modules/accounts/interfaces/IGame";
+import { IGame } from "./IGame";
 
 export interface IGamesList {
   id: string;

@@ -1,4 +1,4 @@
-import "../../../../../config.js";
+import "@root/config.js";
 
 import { createClient } from "redis";
 

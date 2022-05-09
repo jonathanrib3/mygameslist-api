@@ -1,6 +1,6 @@
-import { GameCurrentStatus } from "@modules/accounts/enums/index";
+import { GameCurrentStatus } from "@modules/games/enums/index";
 
-export interface IGame {
+export interface ICreateGameDTO {
   id: string;
   cover: string;
   title: string;

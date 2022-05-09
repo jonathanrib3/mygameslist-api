@@ -1,5 +1,6 @@
 import { Router } from "express";
 
+import { gameRoutes } from "@infra/http/routes/games.routes";
 import { resetPasswordRoutes } from "@infra/http/routes/reset_password.routes";
 import { resetSessionsRoutes } from "@infra/http/routes/reset_sessions.routes";
 
@@ -12,5 +13,6 @@ router.use("/users", userRoutes);
 router.use("/sessions", sessionRoutes);
 router.use("/resetSessions", resetSessionsRoutes);
 router.use("/resetPassword", resetPasswordRoutes);
+router.use("/games", gameRoutes);
 
 export { router };

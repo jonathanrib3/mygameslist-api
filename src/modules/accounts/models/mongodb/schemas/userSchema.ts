@@ -1,6 +1,6 @@
 import { Schema } from "mongoose";
 
-import { gamesListSchema } from "@modules/accounts/models/mongodb/schemas/gamesListSchema";
+import { gamesListSchema } from "@modules/games/models/mongodb/schemas/gamesListSchema";
 
 export const userSchema = new Schema({
   _id: { type: String, minlength: 36, maxlength: 36 },
