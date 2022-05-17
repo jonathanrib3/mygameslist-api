@@ -1,6 +1,6 @@
 import { AppError } from "@infra/errors/AppError";
 import { IHtmlEmailContent } from "@modules/accounts/interfaces/IHtmlEmailContent";
-import { ISessionsRepository } from "@modules/accounts/repositories/ISessionsRepository";
+import { IResetPasswordSessionsRepository } from "@modules/accounts/repositories/IResetPasswordSessionsRepository";
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
 import {
   EMAIL_NOT_SENT_ERROR,
@@ -18,7 +18,7 @@ interface IRequest {
 class SendResetPasswordLinkEmailUseCase {
   constructor(
     private usersRepository: IUsersRepository,
-    private resetSessionsRepository: ISessionsRepository,
+    private ResetPasswordSessionsRepository: IResetPasswordSessionsRepository,
     private mailProvider: IMailProvider
   ) {}
 
@@ -29,7 +29,7 @@ class SendResetPasswordLinkEmailUseCase {
       throw new AppError(401, USER_NOT_FOUND_ERROR);
     }
 
-    const session = await this.resetSessionsRepository.findByUserId(user.id);
+    const session = await this.ResetPasswordSessionsRepository.findByUserId(user.id);
 
     const link = `${process.env.BASE_URL}/resetPassword?session=${session.id}`;
 
@@ -39,7 +39,7 @@ class SendResetPasswordLinkEmailUseCase {
       token_secret,
     });
 
-    const email_sent_response_data = await this.mailProvider.sendEmail<string>(
+    const email_sent_response_data = await this.mailProvider.sendEmail(
       email_content,
       user.email,
       "Reset Password Service"

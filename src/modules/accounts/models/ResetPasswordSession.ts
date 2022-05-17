@@ -2,7 +2,7 @@ import { v4 } from "uuid";
 
 import { ResetToken } from "@modules/accounts/models/ResetToken";
 
-class ResetSession {
+class ResetPasswordSession {
   id: string;
 
   user_id: string;
@@ -20,4 +20,4 @@ class ResetSession {
   }
 }
 
-export { ResetSession };
+export { ResetPasswordSession };

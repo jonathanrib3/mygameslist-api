@@ -3,9 +3,9 @@ import "@root/config.js";
 import { container } from "tsyringe";
 
 import { AppError } from "@infra/errors/AppError";
-import { ISessionsRepository } from "@modules/accounts/repositories/ISessionsRepository";
+import { IResetPasswordSessionsRepository } from "@modules/accounts/repositories/IResetPasswordSessionsRepository";
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
-import { CreateResetSessionUseCase } from "@modules/accounts/useCases/create_reset_session/CreateResetSessionUseCase";
+import { CreateResetPasswordSessionUseCase } from "@modules/accounts/useCases/create_reset_password_session/CreateResetPasswordSessionUseCase";
 import { INTERNAL_SERVER_ERROR } from "@shared/constants/error_messages";
 import { IMailProvider } from "@shared/containers/providers/IMailProvider";
 
@@ -13,17 +13,17 @@ const environment = process.env.NODE_ENV.trim();
 const usersRepository = container.resolve<IUsersRepository>(
   "MongoUsersRepository"
 );
-const sessionsRepository = container.resolve<ISessionsRepository>(
-  "MongoResetSessionsRepository"
+const sessionsRepository = container.resolve<IResetPasswordSessionsRepository>(
+  "MongoResetPasswordSessionsRepository"
 );
 
-export function getCreateResetSessionUseCase(): CreateResetSessionUseCase {
+let mailProvider: IMailProvider;
+
+export function getCreateResetPasswordSessionUseCase(): CreateResetPasswordSessionUseCase {
   switch (environment) {
     case "test": {
-      const mailProvider = container.resolve<IMailProvider>(
-        "NodemailerMailProvider"
-      );
-      return new CreateResetSessionUseCase(
+      mailProvider = container.resolve<IMailProvider>("NodemailerMailProvider");
+      return new CreateResetPasswordSessionUseCase(
         usersRepository,
         sessionsRepository,
         mailProvider
@@ -31,9 +31,9 @@ export function getCreateResetSessionUseCase(): CreateResetSessionUseCase {
     }
 
     case "development": {
-      const mailProvider = container.resolve<IMailProvider>("SESMailProvider");
+      mailProvider = container.resolve<IMailProvider>("SESMailProvider");
 
-      return new CreateResetSessionUseCase(
+      return new CreateResetPasswordSessionUseCase(
         usersRepository,
         sessionsRepository,
         mailProvider
@@ -41,9 +41,9 @@ export function getCreateResetSessionUseCase(): CreateResetSessionUseCase {
     }
 
     case "production": {
-      const mailProvider = container.resolve<IMailProvider>("SESMailProvider");
+      mailProvider = container.resolve<IMailProvider>("SESMailProvider");
 
-      return new CreateResetSessionUseCase(
+      return new CreateResetPasswordSessionUseCase(
         usersRepository,
         sessionsRepository,
         mailProvider

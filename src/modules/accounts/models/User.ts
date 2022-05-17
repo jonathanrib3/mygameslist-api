@@ -1,6 +1,6 @@
 import { v4 as uuidV4 } from "uuid";
 
-import { IGamesList } from "../interfaces";
+import { IGamesList } from "@modules/games/interfaces/IGamesList";
 
 class User {
   id: string;

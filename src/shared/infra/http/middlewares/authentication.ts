@@ -15,8 +15,8 @@ async function authentication(
   next: NextFunction
 ): Promise<void> {
   const jwtProvider = new JwtProvider();
-  const usersTestRepository = container.resolve<IUsersRepository>(
-    "UsersTestRepository"
+  const usersRepository = container.resolve<IUsersRepository>(
+    "MongoUsersRepository"
   );
 
   const { authorization } = request.headers;
@@ -29,7 +29,7 @@ async function authentication(
 
   const decoded = jwtProvider.decode<IUserToken>(token);
 
-  const user_exists = await usersTestRepository.findById(decoded.data.user_id);
+  const user_exists = await usersRepository.findById(decoded.data.user_id);
 
   if (!user_exists) {
     throw new AppError(401, USER_NOT_FOUND_ERROR);

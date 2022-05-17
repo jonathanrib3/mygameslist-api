@@ -1,7 +1,7 @@
 import { GameCurrentStatus } from "@modules/games/enums/index";
 
 export interface IGame {
-  id: string;
+  id: number;
   cover_url: string;
   title: string;
   genre: string;

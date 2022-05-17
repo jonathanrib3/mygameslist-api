@@ -3,8 +3,8 @@ import "@root/config.js";
 import { injectable } from "tsyringe";
 
 import { AppError } from "@infra/errors/AppError";
-import { ResetSession } from "@modules/accounts/models/ResetSession";
-import { ISessionsRepository } from "@modules/accounts/repositories/ISessionsRepository";
+import { ResetPasswordSession } from "@modules/accounts/models/ResetPasswordSession";
+import { IResetPasswordSessionsRepository } from "@modules/accounts/repositories/IResetPasswordSessionsRepository";
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
 import { SendResetPasswordLinkEmailUseCase } from "@modules/accounts/useCases/send_reset_password_link_email/SendResetPasswordLinkEmailUseCase";
 import { USER_NOT_FOUND_ERROR } from "@shared/constants/error_messages";
@@ -14,14 +14,14 @@ const MIN = Number(process.env.MIN_TOKEN_SECRET);
 const MAX = Number(process.env.MAX_TOKEN_SECRET);
 
 @injectable()
-class CreateResetSessionUseCase {
+class CreateResetPasswordSessionUseCase {
   constructor(
     private usersRepository: IUsersRepository,
-    private sessionsRepository: ISessionsRepository,
+    private sessionsRepository: IResetPasswordSessionsRepository,
     private mailProvider: IMailProvider
   ) {}
 
-  async execute(email: string): Promise<ResetSession> {
+  async execute(email: string): Promise<ResetPasswordSession> {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
@@ -56,4 +56,4 @@ class CreateResetSessionUseCase {
   }
 }
 
-export { CreateResetSessionUseCase };
+export { CreateResetPasswordSessionUseCase };

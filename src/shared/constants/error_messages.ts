@@ -17,6 +17,7 @@ const stringConstants = {
   INTERNAL_SERVER_ERROR:
     "Something went wrong in the server. Please, try again later",
   RESET_SESSION_NOT_FOUND_ERROR: "Session does not exists.",
+  INVALID_GAME_STATUS_ERROR: "Invalid game status",
 };
 
 export const {
@@ -34,4 +35,5 @@ export const {
   EXISTENT_NON_EXPIRED_SESSION_ERROR,
   INTERNAL_SERVER_ERROR,
   RESET_SESSION_NOT_FOUND_ERROR,
+  INVALID_GAME_STATUS_ERROR,
 } = stringConstants;

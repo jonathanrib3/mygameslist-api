@@ -14,7 +14,7 @@ interface IRequest {
 @injectable()
 class CreateAuthSessionUseCase {
   constructor(
-    @inject("UsersTestRepository")
+    @inject("MongoUsersRepository")
     private usersRepository: IUsersRepository,
     @inject("JwtProvider")
     private jwtProvider: JwtProvider

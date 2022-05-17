@@ -1,8 +1,8 @@
 import { GameCurrentStatus } from "@modules/games/enums/index";
 
 export interface ICreateGameDTO {
-  id: string;
-  cover: string;
+  id: number;
+  cover_url: string;
   title: string;
   score: number;
   status: GameCurrentStatus;

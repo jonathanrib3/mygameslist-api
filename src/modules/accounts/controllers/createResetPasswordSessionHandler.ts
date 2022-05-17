@@ -1,17 +1,18 @@
 import { Request, Response } from "express";
 
-import { getCreateResetSessionUseCase } from "@modules/accounts/factories/createResetSessionUseCaseFactory";
+import { getCreateResetPasswordSessionUseCase } from "@modules/accounts/factories/createResetPasswordSessionUseCaseFactory";
 import { RESET_SESSION_CREATED_SUCCESSFULLY } from "@shared/constants/successful_messages";
 
-export async function createResetSessionHandler(
+export async function createResetPasswordSessionHandler(
   request: Request,
   response: Response
 ): Promise<Response<any, Record<string, any>>> {
   const { email } = request.body;
 
-  const createResetSessionUseCase = getCreateResetSessionUseCase();
+  const createResetPasswordSessionUseCase =
+    getCreateResetPasswordSessionUseCase();
 
-  await createResetSessionUseCase.execute(email);
+  await createResetPasswordSessionUseCase.execute(email);
 
   return response
     .status(200)

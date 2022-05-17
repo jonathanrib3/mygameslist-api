@@ -1,10 +1,10 @@
 // eslint-disable-next-line no-shadow
 enum GameCurrentStatus {
-  FINISHED = "Finished",
-  PLAYING = "Playing",
-  DROPPED = "Dropped",
-  PAUSED = "Paused",
-  PLAN_TO_PLAY = "Plan to Play",
+  FINISHED = "FINISHED",
+  PLAYING = "PLAYING",
+  DROPPED = "DROPPED",
+  PAUSED = "PAUSED",
+  PLAN_TO_PLAY = "PLAN TO PLAY",
 }
 
 export { GameCurrentStatus };

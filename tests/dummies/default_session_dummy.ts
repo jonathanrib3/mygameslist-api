@@ -1,11 +1,11 @@
 import "@root/config.js";
 
-import { ResetSession } from "@modules/accounts/models/ResetSession";
+import { ResetPasswordSession } from "@modules/accounts/models/ResetPasswordSession";
 
 import { reset_token } from "./default_reset_token_dummy";
 import { user } from "./default_user_dummy";
 
-const session = new ResetSession();
+const session = new ResetPasswordSession();
 
 Object.assign(session, {
   user_id: user.id,

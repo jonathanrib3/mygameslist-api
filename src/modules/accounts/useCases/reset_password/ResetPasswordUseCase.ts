@@ -4,7 +4,7 @@ import { inject, injectable } from "tsyringe";
 
 import { AppError } from "@infra/errors/AppError";
 import { User } from "@modules/accounts/models/User";
-import { ISessionsRepository } from "@modules/accounts/repositories/ISessionsRepository";
+import { IResetPasswordSessionsRepository } from "@modules/accounts/repositories/IResetPasswordSessionsRepository";
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
 import {
   INVALID_RESET_TOKEN_ERROR,
@@ -20,8 +20,8 @@ interface IRequest {
 @injectable()
 class ResetPasswordUseCase {
   constructor(
-    @inject("MongoResetSessionsRepository")
-    private sessionsRepository: ISessionsRepository,
+    @inject("MongoResetPasswordSessionsRepository")
+    private sessionsRepository: IResetPasswordSessionsRepository,
     @inject("MongoUsersRepository")
     private usersRepository: IUsersRepository
   ) {}

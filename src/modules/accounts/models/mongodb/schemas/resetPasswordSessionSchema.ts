@@ -2,12 +2,12 @@ import "@root/config.js";
 
 import { Schema } from "mongoose";
 
-import { resetTokenSchema } from "@modules/accounts/models/mongodb/schemas/resetTokenSchema";
+import { resetPasswordTokenSchema } from "@modules/accounts/models/mongodb/schemas/resetPasswordTokenSchema";
 
-export const resetSessionSchema = new Schema({
+export const resetPasswordSessionSchema = new Schema({
   _id: { type: String, min: 36, max: 36 },
   user_id: { type: String, min: 36, max: 36, required: true, unique: true },
-  token: resetTokenSchema,
+  token: resetPasswordTokenSchema,
   created_at: {
     type: Date,
     required: true,

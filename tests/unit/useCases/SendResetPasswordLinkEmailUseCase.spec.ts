@@ -1,4 +1,4 @@
-import { ResetSessionsTestRepository } from "@modules/accounts/repositories/implementations/in-memory/ResetSessionsTestRepository";
+import { ResetPasswordSessionsTestRepository } from "@modules/accounts/repositories/implementations/in-memory/ResetPasswordSessionsTestRepository";
 import { UsersTestRepository } from "@modules/accounts/repositories/implementations/in-memory/UsersTestRepository";
 import { session } from "@root/tests/dummies/default_session_dummy";
 import { USER_NOT_FOUND_ERROR } from "@shared/constants/error_messages";
@@ -17,18 +17,18 @@ jest.mock(
 
 describe("send reset password email unit tests", () => {
   let usersTestRepository: UsersTestRepository;
-  let resetSessionsTestRepository: ResetSessionsTestRepository;
+  let ResetPasswordSessionsTestRepository: ResetPasswordSessionsTestRepository;
   let nodemailerMailProvider: NodeMailerMailProvider;
   let sendResetPasswordLinkEmail: SendResetPasswordLinkEmailUseCase;
 
   beforeAll(async () => {
     usersTestRepository = new UsersTestRepository();
-    resetSessionsTestRepository = new ResetSessionsTestRepository();
+    ResetPasswordSessionsTestRepository = new ResetPasswordSessionsTestRepository();
     nodemailerMailProvider = new NodeMailerMailProvider();
 
     sendResetPasswordLinkEmail = new SendResetPasswordLinkEmailUseCase(
       usersTestRepository,
-      resetSessionsTestRepository,
+      ResetPasswordSessionsTestRepository,
       nodemailerMailProvider
     );
   });
@@ -41,7 +41,7 @@ describe("send reset password email unit tests", () => {
     (<jest.Mock>usersTestRepository.findByEmail).mockReturnValue(user);
 
     jest
-      .spyOn(resetSessionsTestRepository, "findByUserId")
+      .spyOn(ResetPasswordSessionsTestRepository, "findByUserId")
       .mockReturnValue(Promise.resolve(session));
 
     (<jest.Mock>nodemailerMailProvider.sendEmail).mockReturnValue({

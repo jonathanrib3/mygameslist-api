@@ -1,17 +1,19 @@
 import { AppError } from "@infra/errors/AppError";
-import { ResetSession } from "@modules/accounts/models/ResetSession";
+import { ResetPasswordSession } from "@modules/accounts/models/ResetPasswordSession";
 import { EXISTENT_NON_EXPIRED_SESSION_ERROR } from "@shared/constants/error_messages";
 
-import { ISessionsRepository } from "../../ISessionsRepository";
+import { IResetPasswordSessionsRepository } from "../../IResetPasswordSessionsRepository";
 
-class ResetSessionsTestRepository implements ISessionsRepository {
-  private repository: ResetSession[];
+class ResetPasswordSessionsTestRepository
+  implements IResetPasswordSessionsRepository
+{
+  private repository: ResetPasswordSession[];
 
   constructor() {
     this.repository = [];
   }
 
-  async create(user_id: string): Promise<ResetSession> {
+  async create(user_id: string): Promise<ResetPasswordSession> {
     const sessionAlreadyExists = await this.findByUserId(user_id);
 
     if (sessionAlreadyExists) {
@@ -22,7 +24,7 @@ class ResetSessionsTestRepository implements ISessionsRepository {
       }
     }
 
-    const new_session = new ResetSession();
+    const new_session = new ResetPasswordSession();
 
     Object.assign(new_session, {
       user_id,
@@ -36,7 +38,7 @@ class ResetSessionsTestRepository implements ISessionsRepository {
     return new_session;
   }
 
-  async findByUserId(user_id: string): Promise<ResetSession> {
+  async findByUserId(user_id: string): Promise<ResetPasswordSession> {
     const session_found = this.repository.find(
       (session) => session.user_id === user_id
     );
@@ -48,7 +50,7 @@ class ResetSessionsTestRepository implements ISessionsRepository {
     return session_found;
   }
 
-  isSessionExpired(session: ResetSession): boolean {
+  isSessionExpired(session: ResetPasswordSession): boolean {
     return (
       new Date().getTime() - Number(process.env.SESSION_EXPIRATION_TIME) >
       session.expires_in
@@ -61,7 +63,7 @@ class ResetSessionsTestRepository implements ISessionsRepository {
     );
   }
 
-  async findById(session_id: string): Promise<ResetSession> {
+  async findById(session_id: string): Promise<ResetPasswordSession> {
     return this.repository.find((session) => session.id === session_id);
   }
 
@@ -79,4 +81,4 @@ class ResetSessionsTestRepository implements ISessionsRepository {
   }
 }
 
-export { ResetSessionsTestRepository };
+export { ResetPasswordSessionsTestRepository };

@@ -2,9 +2,9 @@ import bcrypt from "bcrypt";
 import { v4 } from "uuid";
 
 import { AppError } from "@infra/errors/AppError";
-import { ResetSessionsTestRepository } from "@modules/accounts/repositories/implementations/in-memory/ResetSessionsTestRepository";
+import { ResetPasswordSessionsTestRepository } from "@modules/accounts/repositories/implementations/in-memory/ResetPasswordSessionsTestRepository";
 import { UsersTestRepository } from "@modules/accounts/repositories/implementations/in-memory/UsersTestRepository";
-import { CreateResetSessionUseCase } from "@modules/accounts/useCases/create_reset_session/CreateResetSessionUseCase";
+import { CreateResetPasswordSessionUseCase } from "@modules/accounts/useCases/create_reset_session/CreateResetPasswordSessionUseCase";
 import { SendResetPasswordLinkEmailUseCase } from "@modules/accounts/useCases/send_reset_password_link_email/SendResetPasswordLinkEmailUseCase";
 import {
   EXISTENT_NON_EXPIRED_SESSION_ERROR,
@@ -21,19 +21,19 @@ jest.mock(
   "@modules/accounts/repositories/implementations/in-memory/UsersTestRepository"
 );
 jest.mock(
-  "@modules/accounts/repositories/implementations/in-memory/ResetSessionsTestRepository"
+  "@modules/accounts/repositories/implementations/in-memory/ResetPasswordSessionsTestRepository"
 );
 
 describe("create reset session unit tests", () => {
-  let sessionsTestRepository: ResetSessionsTestRepository;
+  let sessionsTestRepository: ResetPasswordSessionsTestRepository;
   let usersTestRepository: UsersTestRepository;
-  let createResetSessionUseCase: CreateResetSessionUseCase;
+  let createResetPasswordSessionUseCase: CreateResetPasswordSessionUseCase;
   let nodeMailerMailProvider: NodeMailerMailProvider;
 
   beforeAll(async () => {
     usersTestRepository = new UsersTestRepository();
-    sessionsTestRepository = new ResetSessionsTestRepository();
-    createResetSessionUseCase = new CreateResetSessionUseCase(
+    sessionsTestRepository = new ResetPasswordSessionsTestRepository();
+    createResetPasswordSessionUseCase = new CreateResetPasswordSessionUseCase(
       usersTestRepository,
       sessionsTestRepository,
       nodeMailerMailProvider
@@ -53,7 +53,7 @@ describe("create reset session unit tests", () => {
     jest.spyOn(bcrypt, "hashSync").mockReturnValue(token_secret);
     // Act
 
-    const result = await createResetSessionUseCase.execute(user.id);
+    const result = await createResetPasswordSessionUseCase.execute(user.id);
 
     // Assert
 
@@ -80,7 +80,7 @@ describe("create reset session unit tests", () => {
     jest.spyOn(bcrypt, "hashSync").mockReturnValue(token_secret);
     // Act
 
-    const result = await createResetSessionUseCase.execute(user.id);
+    const result = await createResetPasswordSessionUseCase.execute(user.id);
 
     // Assert
 
@@ -96,7 +96,7 @@ describe("create reset session unit tests", () => {
     expect(async () => {
       // Act
 
-      await createResetSessionUseCase.execute(fake_id);
+      await createResetPasswordSessionUseCase.execute(fake_id);
       // Assert
     }).rejects.toThrow(USER_NOT_FOUND_ERROR);
   });
@@ -113,7 +113,7 @@ describe("create reset session unit tests", () => {
     await expect(async () => {
       // Act
 
-      await createResetSessionUseCase.execute(user.id);
+      await createResetPasswordSessionUseCase.execute(user.id);
       // Assert
     }).rejects.toThrow(EXISTENT_NON_EXPIRED_SESSION_ERROR);
   });

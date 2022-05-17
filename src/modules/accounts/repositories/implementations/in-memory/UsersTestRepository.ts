@@ -1,12 +1,15 @@
 import { AppError } from "@infra/errors/AppError";
+import { IAddGameDTO } from "@modules/accounts/dtos/IAddGameDTO";
 import { ICreateUserDTO } from "@modules/accounts/dtos/ICreateUserDTO";
 import { IUpdateUserDTO } from "@modules/accounts/dtos/IUpdateUserDTO";
 import { User } from "@modules/accounts/models/User";
+import { IGame } from "@modules/games/interfaces/IGame";
 import {
   EMAIL_ALREADY_EXISTS_ERROR,
   INTERNAL_SERVER_ERROR,
   UPDATE_INVALID_USER_ERROR,
   USERNAME_ALREADY_EXISTS_ERROR,
+  USER_NOT_FOUND_ERROR,
 } from "@shared/constants/error_messages";
 import { VALID_USER_DATA_MESSAGE } from "@shared/constants/successful_messages";
 
@@ -155,6 +158,28 @@ class UsersTestRepository implements IUsersRepository {
 
   async findByUsername(username: string): Promise<User> {
     return this.repository.find((user) => user.username === username);
+  }
+
+  async addGameToList({ game, user_id }: IAddGameDTO): Promise<IGame[]> {
+    const user = await this.findById(user_id);
+
+    if (!user) {
+      throw new AppError(400, USER_NOT_FOUND_ERROR);
+    }
+
+    user.gamesList.list.push(game);
+
+    return user.gamesList.list;
+  }
+
+  async removeGameFromList(game_id: number, user_id: string): Promise<IGame[]> {
+    const user = await this.findById(user_id);
+
+    user.gamesList.list = user.gamesList.list.filter(
+      (game) => game.id !== game_id
+    );
+
+    return user.gamesList.list;
   }
 }
 

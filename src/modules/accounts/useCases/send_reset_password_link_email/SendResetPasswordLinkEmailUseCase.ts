@@ -8,7 +8,7 @@ import { injectable } from "tsyringe";
 import { AppError } from "@infra/errors/AppError";
 import { getResetPasswordEmailTextContent } from "@infra/smtp/templates/text_templates/reset_password_text_template";
 import { IHtmlEmailContent } from "@modules/accounts/interfaces/IHtmlEmailContent";
-import { ISessionsRepository } from "@modules/accounts/repositories/ISessionsRepository";
+import { IResetPasswordSessionsRepository } from "@modules/accounts/repositories/IResetPasswordSessionsRepository";
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
 import {
   EMAIL_NOT_SENT_ERROR,
@@ -28,7 +28,7 @@ interface IRequest {
 class SendResetPasswordLinkEmailUseCase {
   constructor(
     private usersRepository: IUsersRepository,
-    private sessionsRepository: ISessionsRepository,
+    private sessionsRepository: IResetPasswordSessionsRepository,
     private mailProvider: IMailProvider
   ) {}
 
