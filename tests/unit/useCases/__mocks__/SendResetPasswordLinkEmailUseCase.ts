@@ -29,7 +29,9 @@ class SendResetPasswordLinkEmailUseCase {
       throw new AppError(401, USER_NOT_FOUND_ERROR);
     }
 
-    const session = await this.ResetPasswordSessionsRepository.findByUserId(user.id);
+    const session = await this.ResetPasswordSessionsRepository.findByUserId(
+      user.id
+    );
 
     const link = `${process.env.BASE_URL}/resetPassword?session=${session.id}`;
 
@@ -45,7 +47,7 @@ class SendResetPasswordLinkEmailUseCase {
       "Reset Password Service"
     );
 
-    const { response } = email_sent_response_data;
+    const { response } = email_sent_response_data.nodemailerEmailSentData;
 
     if (!response.match(EMAIL_OK_STATUS_RESPONSE_REGEX)) {
       throw new AppError(400, EMAIL_NOT_SENT_ERROR);

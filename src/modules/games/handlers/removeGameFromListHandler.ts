@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
-import { RemoveGameFromListUseCase } from "@modules/games/useCases/deleteGameFromList/RemoveGameFromListUseCase";
+import { RemoveGameFromListUseCase } from "@modules/games/useCases/removeGameFromList/RemoveGameFromListUseCase";
 
 export async function removeGameFromListHandler(
   request: Request,

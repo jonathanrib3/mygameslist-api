@@ -1,6 +1,6 @@
 import { container } from "tsyringe";
 
-import { ResetPasswordSessionsTestRepository } from "@modules/accounts/repositories/implementations/in-memory/ResetSessionsTestRepository";
+import { ResetPasswordSessionsTestRepository } from "@modules/accounts/repositories/implementations/in-memory/ResetPasswordSessionsTestRepository";
 import { UsersTestRepository } from "@modules/accounts/repositories/implementations/in-memory/UsersTestRepository";
 import { MongoResetPasswordSessionsRepository } from "@modules/accounts/repositories/implementations/mongodb/MongoResetPasswordSessionsRepository";
 import { MongoUsersRepository } from "@modules/accounts/repositories/implementations/mongodb/MongoUsersRepository";

@@ -6,8 +6,12 @@ import { USER_NOT_FOUND_ERROR } from "@shared/constants/error_messages";
 import { reset_token } from "../../dummies/default_reset_token_dummy";
 import { user } from "../../dummies/default_user_dummy";
 
-jest.mock("@modules/accounts/repositories/in-memory/TokensTestRepository");
-jest.mock("@modules/accounts/repositories/in-memory/UsersTestRepository");
+jest.mock(
+  "@modules/accounts/repositories/implementations/in-memory/TokensTestRepository"
+);
+jest.mock(
+  "@modules/accounts/repositories/implementations/in-memory/UsersTestRepository"
+);
 
 describe("password reset unit tests", () => {
   let tokensTestRepository: TokensTestRepository;

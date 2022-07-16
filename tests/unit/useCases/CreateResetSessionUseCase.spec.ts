@@ -4,7 +4,7 @@ import { v4 } from "uuid";
 import { AppError } from "@infra/errors/AppError";
 import { ResetPasswordSessionsTestRepository } from "@modules/accounts/repositories/implementations/in-memory/ResetPasswordSessionsTestRepository";
 import { UsersTestRepository } from "@modules/accounts/repositories/implementations/in-memory/UsersTestRepository";
-import { CreateResetPasswordSessionUseCase } from "@modules/accounts/useCases/create_reset_session/CreateResetPasswordSessionUseCase";
+import { CreateResetPasswordSessionUseCase } from "@modules/accounts/useCases/create_reset_password_session/CreateResetPasswordSessionUseCase";
 import { SendResetPasswordLinkEmailUseCase } from "@modules/accounts/useCases/send_reset_password_link_email/SendResetPasswordLinkEmailUseCase";
 import {
   EXISTENT_NON_EXPIRED_SESSION_ERROR,
@@ -45,7 +45,7 @@ describe("create reset session unit tests", () => {
 
     const { token_secret } = session.token;
 
-    (<jest.Mock>usersTestRepository.findById).mockReturnValue(user);
+    (<jest.Mock>usersTestRepository.findByEmail).mockReturnValue(user);
     (<jest.Mock>sessionsTestRepository.create).mockReturnValue(session);
     jest
       .spyOn(SendResetPasswordLinkEmailUseCase.prototype, "execute")
@@ -89,7 +89,7 @@ describe("create reset session unit tests", () => {
 
   it("should not be able to create a new session with invalid user id", async () => {
     // Arrange
-    (<jest.Mock>usersTestRepository.findById).mockReturnValue(undefined);
+    (<jest.Mock>usersTestRepository.findByEmail).mockReturnValue(undefined);
 
     const fake_id = v4();
 
@@ -104,7 +104,7 @@ describe("create reset session unit tests", () => {
   it("should not be able to create a new session with another non expired user session", async () => {
     // Arrange
 
-    (<jest.Mock>usersTestRepository.findById).mockReturnValue(user);
+    (<jest.Mock>usersTestRepository.findByEmail).mockReturnValue(user);
 
     (<jest.Mock>sessionsTestRepository.create).mockImplementation(() => {
       throw new AppError(400, EXISTENT_NON_EXPIRED_SESSION_ERROR);

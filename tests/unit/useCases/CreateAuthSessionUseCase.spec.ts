@@ -8,7 +8,9 @@ import { JwtProvider } from "@shared/containers/providers/implementations/JwtPro
 
 import { user } from "../../dummies/default_user_dummy";
 
-jest.mock("@modules/accounts/repositories/in-memory/UsersTestRepository");
+jest.mock(
+  "@modules/accounts/repositories/implementations/in-memory/UsersTestRepository"
+);
 jest.mock("@shared/containers/providers/implementations/JwtProvider");
 jest.mock("bcrypt");
 

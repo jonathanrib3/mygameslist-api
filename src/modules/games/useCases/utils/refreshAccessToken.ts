@@ -4,7 +4,7 @@ import axios from "axios";
 import { encryptAccessToken } from "@modules/games/useCases/utils/encryptAccessToken";
 import { client } from "@shared/infra/database/redis/redis_client";
 
-async function refreshAccessToken(): Promise<void> {
+async function getNewAccessToken(): Promise<string> {
   const response = await axios({
     method: "POST",
     url: "https://id.twitch.tv/oauth2/token",
@@ -21,6 +21,10 @@ async function refreshAccessToken(): Promise<void> {
 
   await client.SET("access_token", encrypted_token);
   await client.EXPIRE("access_token", Number(expires_in));
+
+  const new_access_token = await client.GET("access_token");
+
+  return new_access_token;
 }
 
-export { refreshAccessToken };
+export { getNewAccessToken };

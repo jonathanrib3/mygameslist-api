@@ -10,7 +10,9 @@ import { VALID_USER_DATA_MESSAGE } from "@shared/constants/successful_messages";
 
 import { user } from "../../dummies/default_user_dummy";
 
-jest.mock("@modules/accounts/repositories/in-memory/UsersTestRepository");
+jest.mock(
+  "@modules/accounts/repositories/implementations/in-memory/UsersTestRepository"
+);
 
 describe("create user unit tests", () => {
   let usersTestRepository: UsersTestRepository;

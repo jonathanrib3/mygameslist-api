@@ -13,15 +13,16 @@ import {
 
 describe("reset password unit tests", () => {
   let usersTestRepository: UsersTestRepository;
-  let ResetPasswordSessionsTestRepository: ResetPasswordSessionsTestRepository;
+  let resetPasswordSessionsTestRepository: ResetPasswordSessionsTestRepository;
   let resetPasswordUseCase: ResetPasswordUseCase;
   const new_password = "newpasswd321";
 
   beforeAll(async () => {
     usersTestRepository = new UsersTestRepository();
-    ResetPasswordSessionsTestRepository = new ResetPasswordSessionsTestRepository();
+    resetPasswordSessionsTestRepository =
+      new ResetPasswordSessionsTestRepository();
     resetPasswordUseCase = new ResetPasswordUseCase(
-      ResetPasswordSessionsTestRepository,
+      resetPasswordSessionsTestRepository,
       usersTestRepository
     );
   });
@@ -35,7 +36,7 @@ describe("reset password unit tests", () => {
     Object.assign(user_to_be_updated, user);
 
     jest
-      .spyOn(ResetPasswordSessionsTestRepository, "findById")
+      .spyOn(resetPasswordSessionsTestRepository, "findById")
       .mockReturnValue(Promise.resolve(session));
 
     jest.spyOn(bcrypt, "compareSync").mockReturnValue(true);
@@ -69,7 +70,7 @@ describe("reset password unit tests", () => {
     const { id, token } = session;
 
     jest
-      .spyOn(ResetPasswordSessionsTestRepository, "findById")
+      .spyOn(resetPasswordSessionsTestRepository, "findById")
       .mockReturnValue(Promise.resolve(undefined));
 
     // Act and Assert
@@ -87,7 +88,7 @@ describe("reset password unit tests", () => {
     const { id } = session;
 
     jest
-      .spyOn(ResetPasswordSessionsTestRepository, "findById")
+      .spyOn(resetPasswordSessionsTestRepository, "findById")
       .mockReturnValue(Promise.resolve(session));
 
     jest.spyOn(bcrypt, "compareSync").mockReturnValue(false);

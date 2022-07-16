@@ -3,7 +3,9 @@ import { IAddGameDTO } from "@modules/accounts/dtos/IAddGameDTO";
 import { ICreateUserDTO } from "@modules/accounts/dtos/ICreateUserDTO";
 import { IUpdateUserDTO } from "@modules/accounts/dtos/IUpdateUserDTO";
 import { User } from "@modules/accounts/models/User";
+import { IUpdateGameDTO } from "@modules/games/dtos/IUpdateGameDTO";
 import { IGame } from "@modules/games/interfaces/IGame";
+import { transformCurrentStatusFromStringToEnum } from "@modules/games/useCases/utils/transformCurrentStatusFromStringToEnum";
 import {
   EMAIL_ALREADY_EXISTS_ERROR,
   INTERNAL_SERVER_ERROR,
@@ -180,6 +182,24 @@ class UsersTestRepository implements IUsersRepository {
     );
 
     return user.gamesList.list;
+  }
+
+  async updateGameFromList({
+    game_id,
+    status,
+    user_id,
+    score,
+  }: IUpdateGameDTO): Promise<IGame[]> {
+    const user = await this.findById(user_id);
+    const { list } = user.gamesList;
+
+    const game_update = list.find((game) => game.id === game_id);
+
+    game_update.status =
+      transformCurrentStatusFromStringToEnum(status) || game_update.status;
+    game_update.score = score || game_update.score;
+
+    return list;
   }
 }
 

@@ -28,7 +28,7 @@ class CreateResetPasswordSessionUseCase {
       throw new AppError(401, USER_NOT_FOUND_ERROR);
     }
 
-    const token_secret = String(Math.floor(Math.random() * (MAX - MIN) + MIN));
+    const token_secret = this.generateRandomTokenSecret();
 
     const hashed_token_secret = bcrypt.hashSync(
       token_secret,
@@ -42,17 +42,22 @@ class CreateResetPasswordSessionUseCase {
 
     const sendResetPasswordLinkEmailUseCase =
       new SendResetPasswordLinkEmailUseCase(
-        this.usersRepository,
         this.sessionsRepository,
         this.mailProvider
       );
 
     await sendResetPasswordLinkEmailUseCase.execute({
       token_secret,
-      email,
+      user,
     });
 
     return result;
+  }
+
+  generateRandomTokenSecret(): string {
+    const token_secret = Math.floor(Math.random() * (MAX - MIN) + MIN);
+
+    return String(token_secret);
   }
 }
 

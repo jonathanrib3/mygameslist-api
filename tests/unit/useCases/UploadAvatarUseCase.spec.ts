@@ -7,7 +7,9 @@ import { UPDATE_INVALID_USER_ERROR } from "@shared/constants/error_messages";
 
 import { user } from "../../dummies/default_user_dummy";
 
-jest.mock("@modules/accounts/repositories/in-memory/UsersTestRepository");
+jest.mock(
+  "@modules/accounts/repositories/implementations/in-memory/UsersTestRepository"
+);
 
 describe("Upload Avatar Use Case", () => {
   let usersTestRepository: UsersTestRepository;

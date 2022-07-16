@@ -15,7 +15,12 @@ interface IUsersRepository {
   removeGameFromList(game_id: number, user_id: string): Promise<IGame[]>;
   update(data: IUpdateUserDTO): Promise<User>;
   updateAvatar(user_id: string, avatar: string): Promise<User>;
-  updateGameFromList({ game_id, status, user_id, score }: IUpdateGameDTO);
+  updateGameFromList({
+    game_id,
+    status,
+    user_id,
+    score,
+  }: IUpdateGameDTO): Promise<IGame[]>;
 }
 
 export { IUsersRepository };
