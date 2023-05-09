@@ -22,7 +22,7 @@ export async function addGameToListHandler(
 
   const addGameUseCase = container.resolve(AddGameToListUseCase);
 
-  const kkkk = await addGameUseCase.execute({
+  const game = await addGameUseCase.execute({
     game: {
       id,
       cover_url,
@@ -36,5 +36,5 @@ export async function addGameToListHandler(
     user_id,
   });
 
-  return response.status(201).send(kkkk);
+  return response.status(201).send(game);
 }
